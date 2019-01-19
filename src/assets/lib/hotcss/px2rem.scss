@@ -1,0 +1,6 @@
+// 如果单一尺寸的设计稿，那么可以在这里进行全局引入
+// 如果是多尺寸设计图, 那么就需要在每个页面的scss中进行单独定义。
+$designWidth : 750;
+@function px2rem($px){
+	@return $px*320/$designWidth/20 + rem;
+}
