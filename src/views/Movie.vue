@@ -1,17 +1,22 @@
 <template>
   <div>
     <main-header></main-header>
-    <div class="movie">这里是Home!</div>
+    <movie-nav></movie-nav>
+    <movie-list></movie-list>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import mainHeader from "@/components/Movie/main-header";
+import movieNav from "@/components/Movie/movie-nav";
+import movieList from "@/components/Movie/movie-list";
 export default {
   name: "Movie",
   components: {
-    mainHeader
+    mainHeader,
+    movieNav,
+    movieList
   }
 };
 </script>
