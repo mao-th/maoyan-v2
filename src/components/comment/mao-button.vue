@@ -1,5 +1,5 @@
 <template>
-  <div class="btn" :style="{backgroundColor: btnColor}">
+  <div class="btn" :style="{ backgroundColor: btnColor }">
     <!-- 可定制插槽 -->
     <slot></slot>
   </div>
@@ -9,7 +9,8 @@
 export default {
   name: "mao-button",
   props: {
-    color: String
+    color: String,
+    btnNum: Number
   },
   computed: {
     btnColor() {
@@ -22,7 +23,7 @@ export default {
 
 <style lang="scss" scoped>
 .btn {
-  width: px2rem(135);
+  width: px2rem(98);
   height: px2rem(54);
   line-height: px2rem(54);
   text-align: center;

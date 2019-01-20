@@ -68,6 +68,7 @@ export default {
     padding-right: px2rem(30);
     .icon-sousuo {
       font-size: px2rem(50);
+      font-weight: 700;
       color: $mainColor;
     }
   }

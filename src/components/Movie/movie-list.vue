@@ -23,7 +23,7 @@
            <!-- movie-btn -->
           <!-- <div class="btn-goupiao">购票</div> -->
           <!-- 可定制插槽按钮，还可以优化,后续慢慢来 -->
-          <mao-button>购票</mao-button>
+          <mao-button :btnNum="1">购票</mao-button>
         </div>
       </div>
     </div>
@@ -55,12 +55,15 @@ export default {
       height: px2rem(180);
     }
     .movie-info-wrap {
+      flex: 1; // 使中间movieinfo信息占满剩余空间
       margin-left: px2rem(24);
       display: flex;
+      justify-content: space-between;
       align-items: center;
       min-width: 0; // 为了让省略号生效
       .movie-info {
         min-width: 0; // 为了让省略号生效
+        flex: 1;
         .title {
           margin-bottom: px2rem(16);
           .movie-name {
@@ -78,12 +81,13 @@ export default {
           }
         }
         .actor {
+          vertical-align: middle;
+          line-height: px2rem(27);
           margin-top: px2rem(12);
-          line-height: 1;
         }
         .show-info {
           margin-top: px2rem(12);
-          line-height: 1;
+          line-height: px2rem(27);
           margin-bottom: px2rem(14);
         }
       }
