@@ -7,25 +7,25 @@
         <!-- movie-info -->
         <div class="movie-info-wrap">
           <div class="movie-info">
-            <div class="title line-ellipsis">
+            <div class="title">
               <div class="movie-name" v-text="item.nm"></div>
               <i></i>
             </div>
             <!-- 优化分数为0的展示 -->
-            <div v-if="item.sc !== 0" class="score line-elllipsis">
+            <div v-if="item.sc !== 0" class="score">
               <span>观众评</span>
               <span class="sc" v-text="' ' + item.sc"></span>
             </div>
-            <div v-else class="score line-elllipsis">
+            <div v-else class="score">
               <span class="sc" v-text="item.wish + ' '"></span>
               <span>人想看</span>
             </div>
-            <div class="actor line-ellipsis">主演: {{ item.star }}</div>
-            <div class="show-info line-ellipsis" v-text="item.showInfo"></div>
+            <div class="actor">主演: {{ item.star }}</div>
+            <div class="show-info" v-text="item.showInfo"></div>
           </div>
           <!-- movie-btn -->
           <!-- <div class="btn-goupiao">购票</div> -->
-          <!-- 可定制插槽按钮，还可以优化,后续慢慢来 -->
+          <!-- btn使用样式比较多，定义成组件进行管理 -->
           <mao-button :btnNum="item.showst"></mao-button>
         </div>
       </div>
@@ -34,11 +34,14 @@
 </template>
 
 <script>
+import { getMovieList } from "@/apis/api";
 import maoButton from "@/components/comment/mao-button";
 export default {
   name: "movie-list",
-  props: {
-    movieList: Array
+  data() {
+    return {
+      movieList: []
+    };
   },
   filters: {
     imgFilter(imgUrL) {
@@ -48,7 +51,19 @@ export default {
   components: {
     maoButton
   },
-  mounted() {}
+  created() {
+    const p = {
+      ci: 280
+    };
+    getMovieList(p)
+      .then(res => {
+        res = res.data;
+        this.movieList = res.movieList;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 };
 </script>
 
@@ -64,6 +79,7 @@ export default {
   font-size: 0;
   &::-webkit-scrollbar {
     // 隐藏滚动条
+    width: 0 !important;
     height: 0 !important;
   }
   .movie-list {
@@ -74,7 +90,6 @@ export default {
       color: $text-normal;
       border-bottom: 1px solid #dbd6d6;
       justify-content: space-between;
-
       .image {
         width: px2rem(128);
         height: px2rem(180);
@@ -89,6 +104,7 @@ export default {
         .movie-info {
           min-width: 0; // 为了让省略号生效
           margin-right: px2rem(10);
+          @include ellipsis();
           .title {
             margin-bottom: px2rem(16);
             .movie-name {
@@ -99,6 +115,7 @@ export default {
           }
           .score {
             line-height: 1;
+            @include ellipsis();
             .sc {
               color: $text-number;
               font-size: $font-normal;
@@ -106,10 +123,12 @@ export default {
             }
           }
           .actor {
+            @include ellipsis();
             line-height: px2rem(27);
             margin-top: px2rem(12);
           }
           .show-info {
+            @include ellipsis();
             margin-top: px2rem(12);
             line-height: px2rem(27);
             margin-bottom: px2rem(14);

@@ -5,8 +5,8 @@
       <i class="iconfont-jiantou"></i>
     </div>
     <div class="movie-nav-cards">
-      <div class="movie-nav-item" :class="{active: showNavActive}" @click="showNavActive = true">正在热映</div>
-      <div class="movie-nav-item" :class="{active: !showNavActive}" @click="showNavActive = false">即将上映</div>
+      <div class="movie-nav-item" :class="{active: showNavActive}" @click="changeMovieList(true)">正在热映</div>
+      <div class="movie-nav-item" :class="{active: !showNavActive}" @click="changeMovieList(false)">即将上映</div>
     </div>
     <div class="search">
       <i class="iconfont icon-sousuo"></i>
@@ -23,7 +23,12 @@ export default {
       showNavActive: true
     };
   },
-  methods: {}
+  methods: {
+    changeMovieList(flag) {
+      this.showNavActive = flag;
+      this.$emit("changeList", flag);
+    }
+  }
 };
 </script>
 

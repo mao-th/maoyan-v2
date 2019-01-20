@@ -10,7 +10,7 @@ export function get(url, parmas) {
   return new Promise((resolve, reject) => {
     axios
       .get(url, {
-        parmas
+        params: parmas
       })
       .then(res => {
         resolve(res);

@@ -15,8 +15,8 @@ $font-normal: px2rem(30);
 $font-minor: px2rem(26);
 $font-btn: px2rem(24);
 
-// 公共部分样式
-.line-ellipsis {
+// 定义混入样式
+@mixin ellipsis(){
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

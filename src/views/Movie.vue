@@ -1,8 +1,13 @@
 <template>
   <div id="movie">
     <main-header></main-header>
-    <movie-nav></movie-nav>
-    <movie-list :movieList="movieList"></movie-list>
+    <movie-nav @changeList="changeList"></movie-nav>
+    <!-- 动态组件 -->
+    <!-- 使用keep-alive的组件会多出两个生命周期函数：activated（激活的时候） 和 deactivated（失活的时候） -->
+    <keep-alive>
+      <component :is="componentMovieList"></component>
+    </keep-alive>
+    <!-- <movie-list :movieList="movieList"></movie-list> -->
     <main-nav></main-nav>
   </div>
 </template>
@@ -12,35 +17,36 @@
 import mainHeader from "@/components/Movie/main-header";
 import movieNav from "@/components/Movie/movie-nav";
 import movieList from "@/components/Movie/movie-list";
+import movieList2 from "@/components/Movie/movie-list2";
 import mainNav from "@/components/Movie/main-nav";
-import { getMovieList } from "@/apis/api";
 export default {
   name: "Movie",
   data() {
     return {
-      movieList: []
+      componentMovieList: "movie-list"
     };
   },
   components: {
     mainHeader,
     movieNav,
     movieList,
-    mainNav
+    mainNav,
+    movieList2
   },
-  created() {
-    const p = {
-      ci: 280
-    };
-
-    getMovieList(p)
-      .then(res => {
-        res = res.data;
-        this.movieList = res.movieList;
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
+  methods: {
+    /**
+     *  用于进行动态组件的切换
+     */
+    changeList(flag) {
+      this.movieList = [];
+      if (flag) {
+        this.componentMovieList = "movie-list";
+      } else {
+        this.componentMovieList = "movie-list2";
+      }
+    }
+  },
+  created() {}
 };
 </script>
 

@@ -41,6 +41,7 @@ export default {
 <style lang="scss" scoped>
 .btn {
   flex-shrink: 0;
+  align-self: center;
   width: px2rem(98);
   height: px2rem(54);
   line-height: px2rem(54);
