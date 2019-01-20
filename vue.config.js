@@ -1,4 +1,13 @@
 module.exports = {
+  // 设置代理
+  devServer: {
+    proxy: {
+      "/ajax": {
+        target: "http://m.maoyan.com",
+        changeOrigin: true
+      }
+    }
+  },
   css: {
     loaderOptions: {
       // 给 sass-loader 传递选项

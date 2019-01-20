@@ -1,28 +1,46 @@
 <template>
-  <div class="btn" :style="{ backgroundColor: btnColor }">
-    <!-- 可定制插槽 -->
-    <slot></slot>
-  </div>
+  <div class="btn" :style="{ backgroundColor: btnColor }" v-text="btnContent"></div>
 </template>
 
 <script>
 export default {
   name: "mao-button",
   props: {
-    color: String,
     btnNum: Number
   },
-  computed: {
-    btnColor() {
-      // 指定默认颜色
-      return this.color || "#f03d37";
+  data() {
+    return {
+      btnColor: "",
+      btnContent: ""
+    };
+  },
+  methods: {
+    renderBtn() {
+      switch (this.btnNum) {
+        case 3:
+          this.btnColor = "#f03d37";
+          this.btnContent = "购票";
+          break;
+        case 4:
+          this.btnColor = "#3c9fe6";
+          this.btnContent = "预售";
+          break;
+        case 1:
+          this.btnColor = "#faaf00";
+          this.btnContent = "想看";
+          break;
+      }
     }
+  },
+  mounted() {
+    this.renderBtn();
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .btn {
+  flex-shrink: 0;
   width: px2rem(98);
   height: px2rem(54);
   line-height: px2rem(54);

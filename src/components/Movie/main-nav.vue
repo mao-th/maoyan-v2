@@ -24,15 +24,16 @@ export default {
 <style lang="scss" scoped>
 #main-nav {
   position: fixed;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   right: 0; // 让外层元素宽度占满整个宽度，等效于 width:100%;
   display: flex;
   justify-content: space-around;
   border-top: 1px solid #d8d8d8;
   color: $text-nav;
+  background: #fff;
   .nav-item {
-    height: px2rem(96);
+    height: px2rem(98);
     flex: 1;
     text-align: center;
     &.active {
@@ -41,7 +42,7 @@ export default {
     .iconfont {
       display: inline-block;
       font-size: px2rem(44);
-      line-height: px2rem(65);
+      line-height: px2rem(62);
     }
     .nav-name {
       font-size: px2rem(20);
