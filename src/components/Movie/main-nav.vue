@@ -29,7 +29,7 @@ export default {
   right: 0; // 让外层元素宽度占满整个宽度，等效于 width:100%;
   display: flex;
   justify-content: space-around;
-  border-top: 1px solid #d8d8d8;
+  border-top: 2px solid #d8d8d8;
   color: $text-nav;
   background: #fff;
   .nav-item {

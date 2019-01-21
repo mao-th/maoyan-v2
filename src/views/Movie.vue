@@ -1,11 +1,11 @@
 <template>
   <div id="movie">
     <main-header></main-header>
-    <movie-nav @changeList="changeList"></movie-nav>
+    <movie-nav @changeComponent="changeComponent"></movie-nav>
     <!-- 动态组件 -->
     <!-- 使用keep-alive的组件会多出两个生命周期函数：activated（激活的时候） 和 deactivated（失活的时候） -->
     <keep-alive>
-      <component :is="componentMovieList"></component>
+      <component :is="componentName"></component>
     </keep-alive>
     <!-- <movie-list :movieList="movieList"></movie-list> -->
     <main-nav></main-nav>
@@ -23,7 +23,7 @@ export default {
   name: "Movie",
   data() {
     return {
-      componentMovieList: "movie-list"
+      componentName: "movie-list"
     };
   },
   components: {
@@ -37,12 +37,11 @@ export default {
     /**
      *  用于进行动态组件的切换
      */
-    changeList(flag) {
-      this.movieList = [];
+    changeComponent(flag) {
       if (flag) {
-        this.componentMovieList = "movie-list";
+        this.componentName = "movie-list";
       } else {
-        this.componentMovieList = "movie-list2";
+        this.componentName = "movie-list2";
       }
     }
   },

@@ -1,5 +1,7 @@
 <template>
-  <div id="list-wrap">
+<!-- 通过一个标识符 isScroll 移除绑定的滚动事件监听 -->
+<!-- 但是在第二个处理函数必须写成带括号的调用形式并传入需要的参数才能生效 -->
+  <div id="list-wrap" @scroll="isScroll && handlerTouchBottom($event)">
     <div class="movie-list">
       <div class="movie-list-item" v-for="item in movieList" :key="item.id">
         <!-- movie-image -->
@@ -35,12 +37,16 @@
 
 <script>
 import { getMovieList } from "@/apis/api";
-import maoButton from "@/components/comment/mao-button";
+import maoButton from "@/components/common/mao-button";
+import mixin from "@/common/mixin";
 export default {
   name: "movie-list",
+  mixins: [mixin], // 通过混入加载更多api
   data() {
     return {
-      movieList: []
+      movieList: [], // 电影列表
+      movieIds: [], // 该列表保存了目前正在热映电影的所有电影id信息，在加载更多的时候需要到
+      isScroll: true // 用于添加和移除该事件
     };
   },
   filters: {
@@ -51,6 +57,7 @@ export default {
   components: {
     maoButton
   },
+  methods: {},
   created() {
     const p = {
       ci: 280
@@ -59,11 +66,13 @@ export default {
       .then(res => {
         res = res.data;
         this.movieList = res.movieList;
+        this.movieIds = res.movieIds;
       })
       .catch(err => {
         console.log(err);
       });
-  }
+  },
+  mounted() {}
 };
 </script>
 

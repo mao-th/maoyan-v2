@@ -26,7 +26,7 @@ export default {
   methods: {
     changeMovieList(flag) {
       this.showNavActive = flag;
-      this.$emit("changeList", flag);
+      this.$emit("changeComponent", flag);
     }
   }
 };

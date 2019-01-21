@@ -1,9 +1,9 @@
 <template>
-  <div id="movie-list-v2">
+  <div id="movie-list-v2" @scroll="isScroll && handlerTouchBottom($event)">
     <!-- 最受欢迎列表 -->
     <div class="top-list-wrap"> 
       <div class="list-title">近期最受欢迎</div>
-      <div class="list-wrap">
+      <div class="list-wrap" @scroll.prevent="isScrollR && handlerTouchRight($event)">
         <div class="list-item" v-for="item in mostList" :key="item.id">
           <div class="movie-img">
             <img class="image" :src="item.img | imgFilter1" alt="影片海报">
@@ -15,7 +15,7 @@
     </div>
     <!-- 电影列表 -->
     <div class="bottom-list-wrap">
-      <div v-for="(list, key) in regulComingList" :key="key">
+      <div v-for="(list, key) in regulComingObject" :key="key">
         <div class="list-title" v-text="key"></div>
         <div class="movie-list">
           <div class="list-item" v-for="item in list" :key="item.id">
@@ -44,25 +44,32 @@
 
 <script>
 import { getMostExpected, getComingList } from "@/apis/api";
-import maoButton from "@/components/comment/mao-button";
+import mixin from "@/common/mixin";
+import maoButton from "@/components/common/mao-button";
 export default {
   name: "movie-list2",
+  mixins: [mixin], // 通过混入加载更多api
   data() {
     return {
-      mostList: [],
-      comingList: []
+      mostList: [], // 最受欢迎电影列表
+      offset: 0, // 最受欢迎加载更多控制器
+      movieList: [],
+      movieIds: [],
+      isTouchRight: true,
+      isScroll: true,
+      isScrollR: true
     };
   },
   computed: {
-    regulComingList() {
+    regulComingObject() {
       let regulComingObj = {};
-      this.comingList.forEach((item, index) => {
+      this.movieList.forEach((item, index) => {
         let date = item.comingTitle;
         if (index == 0) {
           regulComingObj[date] = [];
         } else {
           // 与当前循环的前一个进行比较
-          if (date != this.comingList[index - 1].comingTitle) {
+          if (date != this.movieList[index - 1].comingTitle) {
             regulComingObj[date] = [];
           }
         }
@@ -85,22 +92,56 @@ export default {
     //   return [...showInfo].splice(11, 3, "").join("");
     // }
   },
+  methods: {
+    /**
+     *  触发触底
+     */
+    handlerTouchRight(e) {
+      let scrollLeft = e.target.scrollLeft;
+      let totalW = e.target.scrollWidth;
+      let offsetWidth = e.target.offsetWidth;
+      console.log(this.offset);
+      if (
+        this.paging.hasMore &&
+        this.isTouchRight &&
+        scrollLeft >= totalW - offsetWidth - 100
+      ) {
+        this.isTouchRight = false;
+        this.offset += 10;
+        this.gotmostExpected();
+      }
+    },
+    /**
+     *  获取最受欢迎电影数据
+     */
+    gotmostExpected() {
+      const p = {
+        ci: 280,
+        limit: 10,
+        offset: this.offset,
+        token: ""
+      };
+      // 获取上部分列表数据
+      getMostExpected(p)
+        .then(res => {
+          res = res.data;
+          this.mostList = this.mostList.concat(res.coming);
+          this.paging = res.paging;
+
+          if (!this.paging.hasMore) {
+            this.isScrollR = false;
+          }
+          this.$nextTick(() => {
+            this.isTouchRight = true;
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
   created() {
-    const p = {
-      ci: 280,
-      limit: 10,
-      offset: 0,
-      token: ""
-    };
-    // 获取上部分列表数据
-    getMostExpected(p)
-      .then(res => {
-        res = res.data;
-        this.mostList = res.coming;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.gotmostExpected();
 
     // 获取下部分列表数据
     const p1 = {
@@ -111,7 +152,8 @@ export default {
 
     getComingList(p1).then(res => {
       res = res.data;
-      this.comingList = res.coming;
+      this.movieList = res.coming;
+      this.movieIds = res.movieIds;
     });
   }
 };
