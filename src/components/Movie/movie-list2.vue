@@ -2,14 +2,20 @@
   <div id="movie-list-v2" @scroll="isScroll && handlerTouchBottom($event)">
     <!-- 最受欢迎列表 -->
     <div class="top-list-wrap"> 
-      <div class="list-title">近期最受欢迎</div>
+      <div class="list-title">近期最受期待</div>
       <div class="list-wrap" @scroll.prevent="isScrollR && handlerTouchRight($event)">
         <div class="list-item" v-for="item in mostList" :key="item.id">
           <div class="movie-img">
+            <!--  图片的展示在PC端观察会出现模糊的情况，但是在手机端观察正常（可能是hotcss中的东西导致） -->
             <img class="image" :src="item.img | imgFilter1" alt="影片海报">
+            <div class="bottom-wrap"></div>
+            <div class="person-wish" v-text="item.wish + '人想看'"></div>
+            <div class="collection">
+              <span class="icon-heart"></span>
+            </div>
           </div>
           <div class="movie-name" v-text="item.nm"></div>
-          <div class="show-date" v-text="item.comingTitle"></div>
+          <div class="show-date">{{item.comingTitle | textFilter}}</div>
         </div>
       </div>
     </div>
@@ -21,11 +27,13 @@
           <div class="list-item" v-for="item in list" :key="item.id">
             <div class="movie-img">
               <img class="image" :src="item.img | imgFilter2" alt="影片海报">
+              <span class="promotion" v-if="item.haspromotionTag">特惠</span>
             </div>
             <div class="movie-info">
               <div class="info-title">
-                <div class="movie-name" v-text="item.nm"></div>
-                <i></i>
+                <span class="movie-name" v-text="item.nm"></span>
+                <i :class="'version '+item.version"></i>
+                <i v-if="item.preShow" class="pre-show"></i>
               </div>
               <div class="wantsee">
                 <span class="person" v-text="item.wish + ' '">99107</span>
@@ -93,10 +101,11 @@ export default {
     },
     imgFilter2(imgUrl) {
       return imgUrl.replace("/w.h", "/128.180");
+    },
+    textFilter(showInfo) {
+      // 尝试运用下展开运算符
+      return showInfo.split(" ")[0];
     }
-    // textFilter(showInfo) { // 尝试运用下展开运算符
-    //   return [...showInfo].splice(11, 3, "").join("");
-    // }
   },
   methods: {
     /**
@@ -197,7 +206,7 @@ export default {
   // 上部分列表样式
   .top-list-wrap {
     background-color: #fff;
-    padding: px2rem(12) 0 px2rem(24) px2rem(30);
+    padding: px2rem(24) 0 px2rem(24) px2rem(30);
     height: px2rem(384);
     margin-bottom: px2rem(20);
     .list-title {
@@ -211,7 +220,9 @@ export default {
       // display: flex;
       white-space: nowrap;
       overflow-x: scroll;
+      overflow-y: hidden;
       &::-webkit-scrollbar {
+        width: 0 !important;
         height: 0 !important;
       }
       .list-item {
@@ -219,11 +230,51 @@ export default {
         margin-right: px2rem(30); // 疑问1：在最后一个子元素不生效
         width: px2rem(170);
         .movie-img {
+          position: relative;
           width: px2rem(170);
+          height: px2rem(230);
           margin-bottom: px2rem(12);
           .image {
             width: 100%;
-            height: px2rem(230);
+            height: 100%;
+          }
+          .bottom-wrap {
+            display: inline-block;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: px2rem(70);
+            background: linear-gradient(to bottom, rgba(77, 77, 77, 0), #000);
+          }
+          .person-wish {
+            position: absolute;
+            bottom: px2rem(4);
+            left: px2rem(10);
+            font-size: px2rem(22);
+            color: $text-number;
+            font-weight: 600;
+            z-index: 1;
+            @include ellipsis();
+          }
+          .collection {
+            width: px2rem(54);
+            line-height: px2rem(54);
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(61, 63, 71, 0.6);
+            text-align: center;
+            border-bottom-right-radius: px2rem(20);
+            .icon-heart {
+              display: inline-block;
+              width: px2rem(20);
+              height: px2rem(20);
+              vertical-align: middle; // 为了让心形垂直居中
+              background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAoCAYAAACFFRgXAAAABGdBTUEAALGPC/xhBQAAAytJREFUWAnVmLtrFFEUh3cWFAtRE5FEEUREsFAkooUIgl3+CUEU7LVR1LBIMERCLFLZRG1CrFJYpLBQENRGC4n4wBeKRUQ2PlAQX+v3m70z7MzemZ3HZp05cPbce86553w7O7Mzc51KjDQaDYfwDvSAseux69Cv6Ef0LXoHXXAc5y82UqhVJbgLPYhuQTega9DPaB19ht6VpVYDaxUBWYUGewkcQzdbE4LOJabXaHQ76G7OqHWI0RG0v+mJ/XxPdJpaD2xZbcAUX0XiSXS/bUEH3yPil2imL1Chln6RE+huzVPKffJV60frugAwDfoI1tBtrUkpx4vknzVrLmAHU65vTX/F5DzQnzynDwzsCpwX0e1eMIfV+S3ReZpXXlDgFNC/VEgXgifHGXQDVvUE2g1Y1RKT2FxxgTm6cg4bXxHNsGH0j/DhIlKGmFzGKuSbCAyFgkWcDsG6UaeE/m/LIvsEvKcstGIV8ECJgAcErJtFWaRPwCvLQitWAbv3/ZJALwlYj3ZlkbqA9YBRFnkp4HtloRWrgJ+g/uNbgeHF+LTKY5tebWYLDOqhzYpVR1hyE33njor5ITYxNp/WIP/DeBINvI4ooQAipknD6D9eVnC8JjCOxr799vgLiGXcsLmtvVPCnRB4yGDanRTjQ2/PYvIlACwvCTcwM37G/xvMGJYAQRuwoiRex8wFMns7mTMMbV2twMpiwVXMfNuK5XfMm97WTpHAJvsy9pZ15fI41Us9IyUWmG+qPa4ptBe3b/WYMj2zAWsVBfQfPYEGrlbFuiiqPWF6xZaNPcLeSgr9ZjyGLni+LlrVHDM9OpZNBKwqFPyJGUWfa94lUa1RUztRSX9vLVE2SewNrMboaG9NuiYi7w3+M8B+i4hb3amBVQXotRjdxpPsHWtJWLQHfBrYL+FAp3kmYBUFWnu/2u1Mu03wgTXajaxjU0tmYHUCehAj6H7NE4ggBSvoTJL4orNVp/Eifm1eJ/lplXMuD6wYcgGrAAA6H0fQ75pHiGIjJjciJZk7N7DaAKIrvobarnj5aiaHYT7JdQ6HW5sL8Sj+nSb2GHsF2EwXWLi+5v8ArR6xIZ+h44wAAAAASUVORK5CYII=);
+              background-repeat: no-repeat;
+              background-size: 100%;
+            }
           }
         }
         .movie-name {
@@ -259,9 +310,22 @@ export default {
         padding: px2rem(24) px2rem(28) px2rem(24) 0;
         border-bottom: 1px solid #dbd6d6;
         .movie-img {
+          position: relative;
           .image {
             width: px2rem(128);
             height: px2rem(180);
+          }
+          .promotion {
+            display: inline-block;
+            width: px2rem(52);
+            line-height: px2rem(30);
+            text-align: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #f90;
+            font-size: px2rem(20);
+            color: #fff;
           }
         }
         .movie-info {
@@ -274,6 +338,9 @@ export default {
             font-weight: 700;
             color: #333;
             margin-bottom: px2rem(14);
+            .movie-name {
+              padding-right: px2rem(10);
+            }
           }
           .wantsee {
             line-height: 1;

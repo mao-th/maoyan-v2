@@ -5,13 +5,17 @@
     <div class="movie-list">
       <div class="movie-list-item" v-for="item in movieList" :key="item.id">
         <!-- movie-image -->
-        <img class="image" :src="item.img | imgFilter" alt="影片海报">
+        <div class="movie-item-left">
+          <img class="image" :src="item.img | imgFilter" alt="影片海报">
+          <span class="promotion" v-if="item.haspromotionTag">特惠</span>
+        </div>
         <!-- movie-info -->
         <div class="movie-info-wrap">
           <div class="movie-info">
             <div class="title">
-              <div class="movie-name" v-text="item.nm"></div>
-              <i></i>
+              <span class="movie-name" v-text="item.nm"></span>
+              <i :class="'version '+item.version"></i>
+              <i v-if="item.preShow" class="pre-show"></i>
             </div>
             <!-- 优化分数为0的展示 -->
             <div v-if="item.sc !== 0" class="score">
@@ -123,9 +127,24 @@ export default {
       color: $text-normal;
       border-bottom: 1px solid #dbd6d6;
       justify-content: space-between;
-      .image {
-        width: px2rem(128);
-        height: px2rem(180);
+      .movie-item-left {
+        position: relative;
+        .image {
+          width: px2rem(128);
+          height: px2rem(180);
+        }
+        .promotion {
+          display: inline-block;
+          width: px2rem(52);
+          line-height: px2rem(30);
+          text-align: center;
+          position: absolute;
+          top: 0;
+          left: 0;
+          background-color: #f90;
+          font-size: px2rem(20);
+          color: #fff;
+        }
       }
       .movie-info-wrap {
         flex: 1; // 使中间movieinfo信息占满剩余空间
@@ -139,10 +158,13 @@ export default {
           margin-right: px2rem(10);
           .title {
             margin-bottom: px2rem(16);
+            line-height: px2rem(48);
+            max-height: px2rem(48);
             .movie-name {
               color: $text-title;
               font-size: px2rem(34);
               font-weight: 700;
+              padding-right: px2rem(10);
               @include ellipsis();
             }
           }
