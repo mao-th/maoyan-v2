@@ -49,6 +49,9 @@ import maoButton from "@/components/common/mao-button";
 export default {
   name: "movie-list2",
   mixins: [mixin], // 通过混入加载更多api
+  props: {
+    city: Object
+  },
   data() {
     return {
       mostList: [], // 最受欢迎电影列表
@@ -56,11 +59,14 @@ export default {
       movieList: [],
       movieIds: [],
       isTouchRight: true,
-      isScroll: true,
-      isScrollR: true
+      isScrollR: true,
+      oldCityId: 0
     };
   },
   computed: {
+    // cityId() {
+    //   return this.city.id;
+    // },
     regulComingObject() {
       let regulComingObj = {};
       this.movieList.forEach((item, index) => {
@@ -100,7 +106,7 @@ export default {
       let scrollLeft = e.target.scrollLeft;
       let totalW = e.target.scrollWidth;
       let offsetWidth = e.target.offsetWidth;
-      console.log(this.offset);
+
       if (
         this.paging.hasMore &&
         this.isTouchRight &&
@@ -108,15 +114,16 @@ export default {
       ) {
         this.isTouchRight = false;
         this.offset += 10;
-        this.gotmostExpected();
+        this.gotmostExpected("more");
       }
     },
     /**
      *  获取最受欢迎电影数据
      */
-    gotmostExpected() {
+    gotmostExpected(flag) {
+      this.oldCityId = this.cityId;
       const p = {
-        ci: 280,
+        ci: this.cityId,
         limit: 10,
         offset: this.offset,
         token: ""
@@ -125,7 +132,11 @@ export default {
       getMostExpected(p)
         .then(res => {
           res = res.data;
-          this.mostList = this.mostList.concat(res.coming);
+          if (flag === "more") {
+            this.mostList = this.mostList.concat(res.coming);
+          } else {
+            this.mostList = res.coming;
+          }
           this.paging = res.paging;
 
           if (!this.paging.hasMore) {
@@ -138,23 +149,34 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    gotComingList() {
+      const p1 = {
+        ci: this.cityId,
+        limit: 10,
+        token: ""
+      };
+
+      getComingList(p1).then(res => {
+        res = res.data;
+        this.movieList = res.coming;
+        this.movieIds = res.movieIds;
+      });
     }
   },
   created() {
     this.gotmostExpected();
 
     // 获取下部分列表数据
-    const p1 = {
-      ci: 280,
-      limit: 10,
-      token: ""
-    };
-
-    getComingList(p1).then(res => {
-      res = res.data;
-      this.movieList = res.coming;
-      this.movieIds = res.movieIds;
-    });
+    this.gotComingList();
+  },
+  activated() {
+    if (this.oldCityId !== this.cityId) {
+      console.log("city改变了");
+      this.gotmostExpected();
+      this.gotComingList();
+    }
+    return;
   }
 };
 </script>
@@ -164,7 +186,7 @@ export default {
   position: absolute;
   left: 0;
   right: 0;
-  top: px2rem(188);
+  top: px2rem(190);
   bottom: px2rem(98);
   background-color: #f5f5f5;
   overflow-y: scroll;

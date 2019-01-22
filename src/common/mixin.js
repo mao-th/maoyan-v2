@@ -1,11 +1,20 @@
 import { getMoreComingList } from "../apis/api";
 // mixin
 const mixin = {
+  props: {
+    city: Object
+  },
   data() {
     return {
       isTouchBottom: true, // 防止触底多次触发
-      queryStringMovieIds: "" // queryString 对应=> movieIds
+      queryStringMovieIds: "", // queryString 对应=> movieIds
+      isScroll: true // 用于添加和移除该事件
     };
+  },
+  computed: {
+    cityId() {
+      return this.city.id;
+    }
   },
   methods: {
     /**
@@ -15,14 +24,12 @@ const mixin = {
     handlerTouchBottom(e) {
       this.handlerMovieIds();
       console.log(this.queryStringMovieIds);
-
       if (!this.queryStringMovieIds) return;
 
       // 获取当前滚动条的位置
       let scrollTop = e.target.scrollTop;
       // 获取元素的可视化高度
       let offsetHeight = e.target.offsetHeight;
-
       // 获取元素的滚动总高度
       let totalH = e.target.scrollHeight;
 
@@ -42,7 +49,7 @@ const mixin = {
      */
     handlerMoreComingList() {
       const p = {
-        ci: 280,
+        ci: this.cityId,
         movieIds: this.queryStringMovieIds,
         token: ""
       };

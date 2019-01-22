@@ -42,12 +42,20 @@ import mixin from "@/common/mixin";
 export default {
   name: "movie-list",
   mixins: [mixin], // 通过混入加载更多api
+  props: {
+    city: Object
+  },
   data() {
     return {
       movieList: [], // 电影列表
       movieIds: [], // 该列表保存了目前正在热映电影的所有电影id信息，在加载更多的时候需要到
-      isScroll: true // 用于添加和移除该事件
+      oldCityId: 0
     };
+  },
+  computed: {
+    // cityId() {
+    //   return this.city.id;
+    // }
   },
   filters: {
     imgFilter(imgUrL) {
@@ -57,29 +65,45 @@ export default {
   components: {
     maoButton
   },
-  methods: {},
-  created() {
-    const p = {
-      ci: 280
-    };
-    getMovieList(p)
-      .then(res => {
-        res = res.data;
-        this.movieList = res.movieList;
-        this.movieIds = res.movieIds;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  methods: {
+    /**
+     *  发送ajax请求 - 根据城市id获取对应城市电影列表数据
+     */
+    gotMovieList() {
+      this.oldCityId = this.cityId; // 记录上一次请求的城市id
+
+      const p = {
+        ci: this.cityId
+      };
+      getMovieList(p)
+        .then(res => {
+          res = res.data;
+          this.movieList = res.movieList;
+          this.movieIds = res.movieIds;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   },
-  mounted() {}
+  created() {
+    this.gotMovieList();
+  },
+  activated() {
+    if (this.oldCityId !== this.cityId) {
+      console.log("city改变了");
+      // 发送请求
+      this.gotMovieList();
+    }
+    return;
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 #list-wrap {
   position: absolute;
-  top: px2rem(188);
+  top: px2rem(190);
   left: 0;
   right: 0;
   bottom: px2rem(96);
@@ -113,13 +137,13 @@ export default {
         .movie-info {
           min-width: 0; // 为了让省略号生效
           margin-right: px2rem(10);
-          @include ellipsis();
           .title {
             margin-bottom: px2rem(16);
             .movie-name {
               color: $text-title;
               font-size: px2rem(34);
               font-weight: 700;
+              @include ellipsis();
             }
           }
           .score {

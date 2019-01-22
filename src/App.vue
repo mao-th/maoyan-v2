@@ -1,6 +1,8 @@
 <template>
   <!-- 路由占位符 -->
-  <router-view/>
+  <keep-alive>
+    <router-view/>
+  </keep-alive>
 </template>
 
 <script>

@@ -1,11 +1,11 @@
 <template>
   <div id="movie">
     <main-header></main-header>
-    <movie-nav @changeComponent="changeComponent"></movie-nav>
+    <movie-nav :city="city" @changeComponent="changeComponent"></movie-nav>
     <!-- 动态组件 -->
     <!-- 使用keep-alive的组件会多出两个生命周期函数：activated（激活的时候） 和 deactivated（失活的时候） -->
     <keep-alive>
-      <component :is="componentName"></component>
+      <component :is="componentName" :city="city"></component>
     </keep-alive>
     <!-- <movie-list :movieList="movieList"></movie-list> -->
     <main-nav></main-nav>
@@ -19,12 +19,16 @@ import movieNav from "@/components/Movie/movie-nav";
 import movieList from "@/components/Movie/movie-list";
 import movieList2 from "@/components/Movie/movie-list2";
 import mainNav from "@/components/Movie/main-nav";
+import { mapGetters } from "vuex";
 export default {
   name: "Movie",
   data() {
     return {
       componentName: "movie-list"
     };
+  },
+  computed: {
+    ...mapGetters(["city"])
   },
   components: {
     mainHeader,

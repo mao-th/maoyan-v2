@@ -20,3 +20,13 @@ export const getComingList = parmas => get("/ajax/comingList", parmas);
  * @param {any} parmas
  */
 export const getMoreComingList = parmas => get("/ajax/moreComingList", parmas);
+/**
+ *  获取城市列表
+ *  @parmas {any} parmas
+ */
+export const getCityList = parmas => get("/api/cities.json", parmas);
+/**
+ * 定位当前地理城市 - 百度API
+ * @param {any} parmas
+ */
+export const getLocationCity = parmas => get("/location/ip", parmas);

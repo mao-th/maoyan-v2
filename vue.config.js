@@ -3,7 +3,18 @@ module.exports = {
   devServer: {
     proxy: {
       "/ajax": {
-        target: "http://m.maoyan.com",
+        target: "http://m.maoyan.com"
+      },
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        pathRewrite: {
+          // 路径重写
+          "^/api": "/city-data"
+        }
+      },
+      "/location": {
+        target: "https://api.map.baidu.com",
         changeOrigin: true
       }
     }

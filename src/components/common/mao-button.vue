@@ -17,6 +17,10 @@ export default {
   methods: {
     renderBtn() {
       switch (this.btnNum) {
+        // case 2:  bug状态
+        //   this.btnColor = "#f03d37";
+        //   this.btnContent = "购票";
+        //   break;
         case 3:
           this.btnColor = "#f03d37";
           this.btnContent = "购票";

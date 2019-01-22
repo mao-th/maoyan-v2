@@ -1,9 +1,9 @@
 <template>
   <div id="movie-nav">
-    <div class="city">
-      <span class="city-name">肇庆</span>
+    <router-link class="city" to="/city" tag="div">
+      <span class="city-name" v-text="cityName"></span>
       <i class="iconfont-jiantou"></i>
-    </div>
+    </router-link>
     <div class="movie-nav-cards">
       <div class="movie-nav-item" :class="{active: showNavActive}" @click="changeMovieList(true)">正在热映</div>
       <div class="movie-nav-item" :class="{active: !showNavActive}" @click="changeMovieList(false)">即将上映</div>
@@ -18,10 +18,18 @@
 import "@/assets/css/iconfont.css";
 export default {
   name: "movie-nav",
+  props: {
+    city: Object
+  },
   data() {
     return {
       showNavActive: true
     };
+  },
+  computed: {
+    cityName() {
+      return this.city.nm;
+    }
   },
   methods: {
     changeMovieList(flag) {
@@ -65,7 +73,7 @@ export default {
       margin: 0 px2rem(24);
       &.active {
         color: $mainColor;
-        border-bottom: 5px solid $mainColor;
+        border-bottom: px2rem(6) solid $mainColor;
       }
     }
   }
