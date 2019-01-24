@@ -48,6 +48,7 @@
 
 <script>
 import { getCityList, getLocationCity } from "@/apis/api";
+import { _queueSort } from "@/common/common";
 import { mapState } from "vuex";
 export default {
   name: "City",
@@ -142,23 +143,7 @@ export default {
      *  处理最近访问城市列表队列
      */
     _handleCityQueue(city) {
-      let cityIndex;
-      let result = this.accessCityList.some((item, index) => {
-        if (city.id === item.id) {
-          // 说明列表中已存在
-          cityIndex = index;
-          return true;
-        }
-      });
-      if (result) {
-        // 属于重复的点击
-        this.accessCityList.splice(cityIndex, 1); // 删除掉
-      } else {
-        if (this.accessCityList.length >= 3) {
-          this.accessCityList.pop(); // 删除最后一个
-        }
-      }
-      this.accessCityList.unshift(city); // 添加到头部
+      _queueSort(this.accessCityList, city);
 
       this.$store.commit("SET_ACCESSCITYLIST", this.accessCityList); // 提交commit
 

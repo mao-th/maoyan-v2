@@ -30,3 +30,8 @@ export const getCityList = parmas => get("/api/cities.json", parmas);
  * @param {any} parmas
  */
 export const getLocationCity = parmas => get("/location/ip", parmas);
+/**
+ * 根据关键字查询电影以及电影院数据
+ * @param {any} parmas
+ */
+export const searchKeyWord = parmas => get("/ajax/search", parmas);

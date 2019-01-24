@@ -38,6 +38,7 @@ $font-btn: px2rem(24);
 // 电影列表标签统一样式配置
 .pre-show, .version{
   display: inline-block;
+  flex-shrink: 0;
   width: px2rem(34);
   height: px2rem(28);
   background-repeat: no-repeat;

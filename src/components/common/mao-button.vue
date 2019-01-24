@@ -46,7 +46,7 @@ export default {
 .btn {
   flex-shrink: 0;
   align-self: center;
-  width: px2rem(98);
+  width: px2rem(96);
   height: px2rem(54);
   line-height: px2rem(54);
   text-align: center;

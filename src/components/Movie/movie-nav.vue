@@ -8,9 +8,9 @@
       <div class="movie-nav-item" :class="{active: showNavActive}" @click="changeMovieList(true)">正在热映</div>
       <div class="movie-nav-item" :class="{active: !showNavActive}" @click="changeMovieList(false)">即将上映</div>
     </div>
-    <div class="search">
+    <router-link class="search" to="/search">
       <i class="iconfont icon-sousuo"></i>
-    </div>
+    </router-link>
   </div>
 </template>
 

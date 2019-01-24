@@ -1,6 +1,6 @@
 <template>
   <div id="movie">
-    <main-header></main-header>
+    <main-header :title="title"></main-header>
     <movie-nav :city="city" @changeComponent="changeComponent"></movie-nav>
     <!-- 动态组件 -->
     <!-- 使用keep-alive的组件会多出两个生命周期函数：activated（激活的时候） 和 deactivated（失活的时候） -->
@@ -14,16 +14,17 @@
 
 <script>
 // @ is an alias to /src
-import mainHeader from "@/components/Movie/main-header";
+import mainHeader from "@/components/common/main-header";
+import mainNav from "@/components/common/main-nav";
 import movieNav from "@/components/Movie/movie-nav";
 import movieList from "@/components/Movie/movie-list";
 import movieList2 from "@/components/Movie/movie-list2";
-import mainNav from "@/components/Movie/main-nav";
 import { mapGetters } from "vuex";
 export default {
   name: "Movie",
   data() {
     return {
+      title: "毛毛电影v2",
       componentName: "movie-list"
     };
   },

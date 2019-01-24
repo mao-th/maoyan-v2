@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Movie from "./views/Movie.vue";
 import City from "./views/City.vue";
+import Search from "./views/Search.vue";
 
 Vue.use(Router);
 
@@ -20,6 +21,11 @@ export default new Router({
       path: "/city",
       name: "City",
       component: City
+    },
+    {
+      path: "/search",
+      name: "Search",
+      component: Search
     },
     {
       path: "/cinema",
