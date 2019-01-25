@@ -1,6 +1,6 @@
 <template>
   <!-- 路由占位符 -->
-  <keep-alive>
+  <keep-alive exclude="MovieDetailAndCinemas">
     <router-view/>
   </keep-alive>
 </template>

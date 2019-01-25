@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Movie from "./views/Movie.vue";
 import City from "./views/City.vue";
 import Search from "./views/Search.vue";
+import MovieDetailAndCinemas from "./views/MovieDetailAndCinemas";
 
 Vue.use(Router);
 
@@ -26,6 +27,11 @@ export default new Router({
       path: "/search",
       name: "Search",
       component: Search
+    },
+    {
+      path: "/MovieDetailAndCinemas/:id",
+      name: "MovieDetailAndCinemas",
+      component: MovieDetailAndCinemas
     },
     {
       path: "/cinema",

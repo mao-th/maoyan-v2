@@ -3,7 +3,13 @@
 <!-- 但是在第二个处理函数必须写成带括号的调用形式并传入需要的参数才能生效 -->
   <div id="list-wrap" @scroll="isScroll && handlerTouchBottom($event)">
     <div class="movie-list">
-      <div class="movie-list-item" v-for="item in movieList" :key="item.id">
+      <router-link 
+        class="movie-list-item" 
+        v-for="item in movieList" 
+        :key="item.id" 
+        tag="div"
+        :to="'/MovieDetailAndCinemas/' + item.id"
+      >
         <!-- movie-image -->
         <div class="movie-item-left">
           <img class="image" :src="item.img | imgFilter" alt="影片海报">
@@ -34,7 +40,7 @@
           <!-- btn使用样式比较多，定义成组件进行管理 -->
           <mao-button :btnNum="item.showst"></mao-button>
         </div>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>

@@ -2,36 +2,41 @@
 import { get, post } from "./http.js";
 /**
  * 获取正在热映电影列表
- * @param {any} parmas
+ * @param {any} params
  */
-export const getMovieList = parmas => get("/ajax/movieOnInfoList", parmas);
+export const getMovieList = params => get("/ajax/movieOnInfoList", params);
 /**
  * 获取即将上映 - 最受欢迎电影列表
- * @param {any} parmas
+ * @param {any} params
  */
-export const getMostExpected = parmas => get("/ajax/mostExpected", parmas);
+export const getMostExpected = params => get("/ajax/mostExpected", params);
 /**
  * 获取即将上映 - 下部分电影列表
- * @param {any} parmas
+ * @param {any} params
  */
-export const getComingList = parmas => get("/ajax/comingList", parmas);
+export const getComingList = params => get("/ajax/comingList", params);
 /**
  * 触底触发，获取更多电影列表数据
- * @param {any} parmas
+ * @param {any} params
  */
-export const getMoreComingList = parmas => get("/ajax/moreComingList", parmas);
+export const getMoreComingList = params => get("/ajax/moreComingList", params);
 /**
  *  获取城市列表
- *  @parmas {any} parmas
+ *  @params {any} params
  */
-export const getCityList = parmas => get("/api/cities.json", parmas);
+export const getCityList = params => get("/api/cities.json", params);
 /**
  * 定位当前地理城市 - 百度API
- * @param {any} parmas
+ * @param {any} params
  */
-export const getLocationCity = parmas => get("/location/ip", parmas);
+export const getLocationCity = params => get("/location/ip", params);
 /**
  * 根据关键字查询电影以及电影院数据
- * @param {any} parmas
+ * @param {any} params
  */
-export const searchKeyWord = parmas => get("/ajax/search", parmas);
+export const searchKeyWord = params => get("/ajax/search", params);
+/**
+ * 根据movieID获取电影的详情信息
+ * @param {any} params
+ */
+export const getmovieDetail = params => get("/ajax/detailmovie", params);
