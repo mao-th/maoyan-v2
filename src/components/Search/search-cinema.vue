@@ -64,6 +64,10 @@ export default {
       justify-content: space-between;
       align-items: center;
       padding: px2rem(30) 0;
+      border-bottom: px2rem(1) solid #e5e5e5;
+      &:last-child {
+        border-bottom: 0 none;
+      }
       .cinema-info {
         min-width: 0;
         .cinema-name-price {

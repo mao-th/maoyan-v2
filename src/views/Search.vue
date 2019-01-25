@@ -29,6 +29,11 @@
       <search-movie :movies="movies"></search-movie>
       <!-- 电影院列表 -->
       <search-cinema :cinemas="cinemas"></search-cinema>
+      <!-- 当电影和电影院都没有查询到数据的时候展示 -->
+      <div class="no-result" v-show="!isEmptyMovies && !isEmptyCinemas">
+        <div class="tips">没有找到相关内容</div>
+        <div class="everyone-search">大家都在搜</div>
+      </div>
     </div>
   </div>
 </template>
@@ -58,6 +63,13 @@ export default {
     }),
     cityId() {
       return this.city.id;
+    },
+    // 用于判断对象是否为空
+    isEmptyMovies() {
+      return Object.keys(this.movies).length;
+    },
+    isEmptyCinemas() {
+      return Object.keys(this.cinemas).length;
     }
   },
   components: {
@@ -70,27 +82,32 @@ export default {
      *  根据关键字发送ajax请求进行查询
      */
     searchKW() {
-      // 发送前对数据进行重置
-      this.movies = {};
-      this.cinemas = {};
-
       const p = {
         cityId: this.cityId,
         kw: this.keyWord,
         stype: -1
       };
       searchKeyWord(p).then(res => {
-        // 隐藏热门搜索
+        this.isShow = false; // 隐藏热门搜索
         res = res.data;
         if (res.movies) {
           this.movies = res.movies;
+        } else {
+          this.movies = {};
         }
         if (res.cinemas) {
           this.cinemas = res.cinemas;
+        } else {
+          this.cinemas = {};
         }
 
         this.$nextTick(() => {
-          this.isShow = false;
+          // 2019-01-25 优化退格到最后时出现的请求延迟现象。
+          // 用于控制当在按退格键，删除了最后一个的时候就强制隐藏电影列表页
+          // 不然会出现请求延迟的情况，导致在没有输入keyword的时候延迟展示上一次请求的结果
+          if (!this.keyWord.trim()) {
+            this.isShow = true;
+          }
           // 2.添加在关键字列表中
           _queueSort(this.keyWordList, this.keyWord);
           // 保存到当前vuex中
@@ -106,17 +123,15 @@ export default {
       clearTimeout(this.timer);
 
       // 重置
-      if (!this.keyWord) {
+      if (!this.keyWord.trim()) {
         this.isShow = true;
-        console.log(this.isShow);
         return;
       }
 
       this.timer = setTimeout(() => {
-        console.log("定时器启动了...");
         // 1.发送ajax请求根据关键字获取查询数据
         this.searchKW();
-      }, 200);
+      }, 150);
     },
     /**
      *  清除输入框的内容并重新获取焦点
@@ -144,6 +159,13 @@ export default {
       // 发送ajax请求
       this.searchKW();
     }
+  },
+  /**
+   *  使用keep-alive后的出现的生命周期钩子函数
+   */
+  deactivated() {
+    this.keyWord = "";
+    this.isShow = true;
   }
 };
 </script>
@@ -231,6 +253,23 @@ export default {
       font-weight: 400;
       font-size: px2rem(30);
       padding-left: px2rem(30);
+    }
+  }
+  .search-result {
+    .no-result {
+      color: #999;
+      border-bottom: px2rem(1) solid #e5e5e5;
+      .tips {
+        line-height: px2rem(88);
+        background-color: #fff;
+        font-size: px2rem(30);
+        text-align: center;
+      }
+      .everyone-search {
+        line-height: px2rem(60);
+        font-size: px2rem(26);
+        padding-left: px2rem(30);
+      }
     }
   }
 }
