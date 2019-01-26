@@ -102,6 +102,7 @@ export default {
   background-color: #fff;
   font-size: px2rem(28);
   color: #666;
+  height: px2rem(84);
   line-height: px2rem(84);
   .date-list {
     display: flex;

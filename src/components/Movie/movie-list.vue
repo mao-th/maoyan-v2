@@ -3,12 +3,11 @@
 <!-- 但是在第二个处理函数必须写成带括号的调用形式并传入需要的参数才能生效 -->
   <div id="list-wrap" @scroll="isScroll && handlerTouchBottom($event)">
     <div class="movie-list">
-      <router-link 
+      <div 
         class="movie-list-item" 
         v-for="item in movieList" 
         :key="item.id" 
-        tag="div"
-        :to="'/MovieDetailAndCinemas/' + item.id"
+        @click="handleToMovieDetailAndCinemas(item.id, item.rt)"
       >
         <!-- movie-image -->
         <div class="movie-item-left">
@@ -40,7 +39,7 @@
           <!-- btn使用样式比较多，定义成组件进行管理 -->
           <mao-button :btnNum="item.showst"></mao-button>
         </div>
-      </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -94,6 +93,13 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    /**
+     *  跳转到MovieDetailAndCinemas页面
+     */
+    handleToMovieDetailAndCinemas(movieId, rt) {
+      this.$store.commit("SET_RT", rt);
+      this.$router.push("/movieDetailAndCinemas/" + movieId);
     }
   },
   created() {

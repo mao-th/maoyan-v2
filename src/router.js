@@ -29,7 +29,7 @@ export default new Router({
       component: Search
     },
     {
-      path: "/MovieDetailAndCinemas/:id",
+      path: "/movieDetailAndCinemas/:id",
       name: "MovieDetailAndCinemas",
       component: MovieDetailAndCinemas
     },

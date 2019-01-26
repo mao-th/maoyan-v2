@@ -19,12 +19,16 @@ try {
 
 export default new Vuex.Store({
   state: {
-    accessCityList: accessCityList || [],
-    search: search || { movie: [], cinema: [] }
+    accessCityList: accessCityList || [], // 最近访问的城市列表
+    search: search || { movie: [], cinema: [] }, // 搜索的关键字列表
+    RT: "" // 电影上映时间（用于movie页和movieDetailAndCinemas页进行通信
   },
   mutations: {
     SET_CITY(state, payload) {
       state.city = payload;
+    },
+    SET_RT(state, payload) {
+      state.RT = payload;
     },
     SET_ACCESSCITYLIST(state, payload) {
       state.accessCityList = payload;
@@ -50,9 +54,10 @@ export default new Vuex.Store({
   },
   getters: {
     city: state =>
-      state.accessCityList[0] || { id: 20, nm: "广州", py: "guangzhou" },
-    searchMovieAndCinema: state => state.search.movie,
-    searchCinema: state => state.search.cinema
+      state.accessCityList[0] || { id: 20, nm: "广州", py: "guangzhou" }, // 当前选择的城市
+    rt: state => state.RT, // 电影的上映时间 - 用于movie页和movieDetailAndCinemas页进行通信
+    searchMovieAndCinema: state => state.search.movie, // 搜索电影和电影院的关键字列表
+    searchCinema: state => state.search.cinema // 搜索电影院的关键字列表
   },
   actions: {}
 });
