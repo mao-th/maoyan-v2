@@ -40,3 +40,8 @@ export const searchKeyWord = params => get("/ajax/search", params);
  * @param {any} params
  */
 export const getmovieDetail = params => get("/ajax/detailmovie", params);
+/**
+ * 获取电影对应电影院列表
+ * @param {any} params
+ */
+export const getMoiveCinemas = params => post("/ajax/movie", params);

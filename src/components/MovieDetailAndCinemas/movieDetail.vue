@@ -113,19 +113,20 @@ export default {
       z-index: -2;
     }
   }
-
   .img {
     width: px2rem(220);
     height: px2rem(300);
+    flex-shrink: 0;
   }
   .movie-info {
     flex: 1;
     margin-left: px2rem(25);
-    line-height: 1;
+    min-width: 0;
     .info-nm {
       font-size: px2rem(40);
       @include ellipsis();
       & ~ div {
+        line-height: 1;
         opacity: 0.8;
         margin-top: px2rem(20);
         @include ellipsis();
