@@ -21,7 +21,7 @@
           <div class="tab" :class="{active: regionTabNumber === 2}" @click="handleChangeRegionTabNum(2)">地铁站</div>
         </div>
         <!-- 商区/地铁站内容 -->
-        <div class="tab-content" v-show="regionTabNumber === 1">
+        <div class="region-content" v-show="regionTabNumber === 1">
           <div class="content-left">
             <div class="left-item" :class="{active: regionLeftTabIndex === 0}">全部(198)</div>
             <div class="left-item">全部(198)</div>
@@ -37,8 +37,45 @@
         </div>
       </div>
       <!-- 品牌tab页内容 -->
-      <div v-show="tabNumber === 1">tab2</div>
-      <div v-show="tabNumber === 2">tab3</div>
+      <div class="brank-tab" v-show="tabNumber === 1">
+        <div class="brank-list">
+          <div class="brank-item" :class="{active: brankIndex === 0}">
+            <i class="brank-hook">√</i>
+            <span class="brank-name">全部</span>
+            <span class="brank-count">40</span>
+          </div>
+        </div>
+      </div>
+      <div class="feature-tab" v-show="tabNumber === 2">
+        <div class="feature-content">
+          <div class="content service">
+            <div class="title">特色功能</div>
+            <div class="list">
+              <div class="item active">全部</div>
+              <div class="item">全部</div>
+              <div class="item">全部</div>
+              <div class="item">全部</div>
+              <div class="item">全部</div>
+              <div class="item">全部</div>
+              <div class="item">全部</div>
+              <div class="item">全部</div>
+              <div class="item">全部</div>
+            </div>
+          </div>
+          <div class="content halltype">
+            <div class="title">特色功能</div>
+            <div class="list">
+              <div class="item active">全部</div>
+              <div class="item">全部</div>
+              <div class="item">全部</div>
+            </div>
+          </div>
+        </div>
+        <div class="feature-bottom">
+          <div class="btn reset">重置</div>
+          <div class="btn enter">确定</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -58,7 +95,8 @@ export default {
       oldTabNumber: 4, // 上一次展示的tab页面索引
       regionTabNumber: 1, // 用于控制region页面中的头部选项卡激活样式
       regionLeftTabIndex: 0, // 用于控制region内容页面中的左边激活样式
-      regionRightTabIndex: 0 // 用于控制region内容页面中的右边激活样式
+      regionRightTabIndex: 0, // 用于控制region内容页面中的右边激活样式
+      brankIndex: 0 // 用于控制brank内容页面的激活样式
     };
   },
   computed: {
@@ -68,7 +106,7 @@ export default {
   },
   methods: {
     /**
-     *  用于切换过滤器的内容
+     *  用于切换过滤器的内容,以及打开/关闭过滤器内容
      */
     handleChangeTab(index) {
       // 重复点击相同的tab页面时
@@ -160,7 +198,7 @@ export default {
           }
         }
       }
-      .tab-content {
+      .region-content {
         display: flex;
         height: px2rem(870);
         font-size: px2rem(28);
@@ -194,6 +232,95 @@ export default {
               font-size: px2rem(24);
               margin-right: px2rem(50);
             }
+          }
+        }
+      }
+    }
+    .brank-tab {
+      height: px2rem(704);
+      .brank-list {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        .brank-item {
+          display: flex;
+          justify-content: space-between;
+          height: px2rem(88);
+          line-height: px2rem(88);
+          border-bottom: px2rem(1) solid #e5e5e5;
+          &.active {
+            color: $btnColor;
+          }
+          .brank-hook {
+            margin-left: px2rem(20);
+          }
+          .brank-name {
+            flex: 1;
+            margin-left: px2rem(18);
+          }
+          .brank-count {
+            font-size: px2rem(24);
+            margin-right: px2rem(90);
+          }
+        }
+      }
+    }
+    .feature-tab {
+      .feature-content {
+        height: px2rem(600);
+        overflow-y: scroll;
+        overflow-x: hidden;
+        .content {
+          .title {
+            margin: px2rem(22) 0 0 px2rem(24);
+          }
+          .list {
+            display: flex;
+            flex-wrap: wrap;
+            font-size: px2rem(22);
+            margin: 0 px2rem(24) px2rem(24) px2rem(24);
+            .item {
+              flex-shrink: 0;
+              width: 21%;
+              height: px2rem(60);
+              line-height: px2rem(60);
+              padding: px2rem(6) 0;
+              text-align: center;
+              border: px2rem(1) solid #ccc;
+              border-radius: px2rem(10);
+              margin-top: px2rem(20);
+              margin-right: 2.67%;
+              &.active {
+                color: $btnColor;
+                border: px2rem(1) solid $btnColor;
+                background-color: #fcf0f0;
+              }
+            }
+          }
+        }
+      }
+      .feature-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: px2rem(120);
+        font-size: px2rem(28);
+        background-color: #fafafa;
+        border-top: px2rem(1) solid #e5e5e5;
+        .btn {
+          width: 21.3%;
+          height: px2rem(68);
+          line-height: px2rem(68);
+          text-align: center;
+          border-radius: px2rem(12);
+          &.reset {
+            border: px2rem(1) solid #e5e5e5;
+            margin-left: px2rem(22);
+          }
+          &.enter {
+            color: #fff;
+            background-color: $btnColor;
+            border: px2rem(1) solid $btnColor;
+            margin-right: px2rem(22);
           }
         }
       }
