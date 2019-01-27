@@ -1,5 +1,5 @@
 <template>
-  <div id="MovieDetailAndCinemas-wrap" ref="wrap">
+  <div id="MovieDetailAndCinemas-wrap" ref="wrap" @scroll="handleScroll">
     <!-- 遮罩层 -->
     <div class="filter" v-show="isFixed || isFixed1" @click="handleClose"></div>
     <!-- 顶部 -->
@@ -10,14 +10,14 @@
     <!-- MovieDetail 部分 -->
     <movie-detail :detailMovie="detailMovie"></movie-detail>
     </div>
-    <div :class="{active: isFixed, active1: isFixed1}">
+    <div :class="{active: isFixed, active1: isFixed1, active2: isFixed2}">
       <!-- 日期选择器 -->
-      <date-selector :dates="dates"></date-selector>
+      <date-selector :dates="dates" @changeDate="handleChangeDate"></date-selector>
       <!-- 过滤器 -->
       <cinemas-filter :filterCinemas="filterCinemas" @open="handleOpen" @close="handleClose" :isClose="isClose"></cinemas-filter>
     </div>
     <!-- 电影院列表 -->
-    <cinemas-list :cinemas="cinemas" :pading="pading"></cinemas-list>
+    <cinemas-list :class="{cinemas:isFixed2}" :cinemas="cinemas" :pading="pading"></cinemas-list>
   </div>
 </template>
 
@@ -41,7 +41,10 @@ export default {
       pading: {}, // 电影院相关信息 - 总数，分页，是否还有更多...
       isFixed: false, // 控制日期选择器和过滤器的打开/关闭  第一种定位样式
       isClose: false, // 控制过滤器的tab页打开/关闭
-      isFixed1: false // 控制日期选择器和过滤器的打开/关闭  第二种定位样式
+      isFixed1: false, // 控制日期选择器和过滤器的打开/关闭  第二种定位样式
+      isFixed2: false, // 控制日期选择器和过滤器的打开/关闭  第三种定位样式
+      day: "", // 用于记录当前选择的日期
+      localRT: ""
     };
   },
   computed: {
@@ -94,6 +97,30 @@ export default {
       this.isClose = true;
       this.isFixed1 = false;
     },
+    /**
+     *  用于处理滚动行为 - 实现日期选择器和过滤器吸顶的行为
+     *  原理：通过判断目前滚动条的位置，改变对应的css样式，实现吸顶效果
+     */
+    handleScroll(e) {
+      // console.log(e.target.scrollTop);
+      if (e.target.scrollTop >= 400) {
+        // 触发吸顶
+        this.isFixed2 = true;
+      } else {
+        this.isFixed2 = false;
+      }
+    },
+    /**
+     *  用于处理日期选择器的选择改变时所要的操作
+     */
+    handleChangeDate(day) {
+      this.day = day;
+      this._getMoiveCinemas();
+      this._getFilterCinemas();
+    },
+    /**
+     *  获取电影详细信息
+     */
     _getmovieDetail() {
       const p = {
         movieId: this.movieId
@@ -101,13 +128,14 @@ export default {
       getmovieDetail(p).then(res => {
         res = res.data;
         this.detailMovie = res.detailMovie;
+        this.localRT = res.detailMovie.rt; // 代表在本页面获取的上映时间
       });
     },
-    _getMoiveCinemas(day) {
+    _getMoiveCinemas() {
       // 发送请求前比较当前电影的上映时间与现在的大小进行选择
       const p = {
         movieId: this.movieId,
-        day: day,
+        day: this.day,
         offset: 0,
         limit: 20,
         districtId: -1,
@@ -130,10 +158,10 @@ export default {
         this.pading = res.pading;
       });
     },
-    _getFilterCinemas(day) {
+    _getFilterCinemas() {
       const p = {
         movieId: this.movieId,
-        day: day
+        day: this.day
       };
       getFilterCinemas(p)
         .then(res => {
@@ -144,17 +172,29 @@ export default {
     }
   },
   created() {
-    this._getmovieDetail();
-    this._getMoiveCinemas(
-      moment(this.rt).isBefore(moment().format("YYYY-MM-DD"))
+    // 通过vuex计算，有bug - 在直接刷新页面后，无法获取到上映时间。
+    // this.day = moment(this.rt).isBefore(moment().format("YYYY-MM-DD"))
+    //   ? moment().format("YYYY-MM-DD")
+    //   : this.rt;
+
+    // 应用promise控制请求的依赖顺序
+    new Promise(resolve => {
+      const p = {
+        movieId: this.movieId
+      };
+      getmovieDetail(p).then(res => {
+        res = res.data;
+        this.detailMovie = res.detailMovie;
+        this.localRT = res.detailMovie.rt; // 代表在本页面获取的上映时间
+        resolve();
+      });
+    }).then(() => {
+      this.day = moment(this.localRT).isBefore(moment().format("YYYY-MM-DD"))
         ? moment().format("YYYY-MM-DD")
-        : this.rt
-    );
-    this._getFilterCinemas(
-      moment(this.rt).isBefore(moment().format("YYYY-MM-DD"))
-        ? moment().format("YYYY-MM-DD")
-        : this.rt
-    );
+        : this.localRT;
+      this._getMoiveCinemas();
+      this._getFilterCinemas();
+    });
   }
 };
 </script>
@@ -190,6 +230,16 @@ export default {
     left: 0;
     right: 0;
     z-index: 99;
+  }
+  .active2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  .cinemas {
+    border-top: 0 none;
+    margin-top: px2rem(180);
   }
 }
 </style>

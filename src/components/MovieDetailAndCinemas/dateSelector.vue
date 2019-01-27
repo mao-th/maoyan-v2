@@ -61,7 +61,14 @@ export default {
   },
   methods: {
     handleChangeIndex(e, index) {
-      this.selectIndex = index;
+      // 避免重复点击 - 发送多次请求
+      if (this.selectIndex == index) {
+        return;
+      }
+      this.selectIndex = index; // 控制样式
+
+      this.$emit("changeDate", this.dates[index].date); // 用于与父组件进行通信
+
       // dateList元素的总宽度（包含超出部分）
       let scrollWidth = this.$refs.dateList.scrollWidth;
       // dateList元素的窗口可视化宽度，在这里其实等于设备宽度
@@ -76,19 +83,17 @@ export default {
       timer = setInterval(() => {
         this.$refs.dateList.scrollLeft += direction * this.everytime_offset;
         d -= this.everytime_offset;
-
         if (d <= 0) {
           clearInterval(timer);
         }
-
         // 当达到最小滚动距离时清除计时器
         if (this.$refs.dateList.scrollLeft <= 0) {
-          console.log("到头了");
+          // console.log("到头了");
           clearInterval(timer);
         }
         // 当达到最大滚动距离时清除计时器
         if (this.$refs.dateList.scrollLeft >= maxScroll) {
-          console.log("到尾了");
+          // console.log("到尾了");
           clearInterval(timer);
         }
       }, this.everytime_time);

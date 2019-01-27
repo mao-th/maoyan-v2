@@ -2,7 +2,6 @@
   <div id="city-list-container" ref="cityListContainer">
     <div class="anchor-list" 
       @click="handleClickAnchor"
-      @touchstart="isTouch = true"
       @touchmove="handleTouchMove"
       @touchend="isTouch = false"
       ref="anchorList"
@@ -119,6 +118,7 @@ export default {
      *  处理touch滑动 - 与旧版相比新增功能
      */
     handleTouchMove(e) {
+      this.isTouch = true;
       if (this.isTouch) {
         let pageY = e.targetTouches[0].pageY; // 当前鼠标所在位置
         let offsetTop = this.$refs.anchorList.offsetTop; // 元素距离视图顶部的距离

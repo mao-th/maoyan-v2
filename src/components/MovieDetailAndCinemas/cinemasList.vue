@@ -50,7 +50,6 @@ export default {
   .cinema-list {
     font-size: px2rem(26);
     padding: 0 px2rem(30);
-    border-top: px2rem(1) solid #e5e5e5;
     border-bottom: px2rem(1) solid #e5e5e5;
     .cinema-item {
       display: flex;
