@@ -11,7 +11,7 @@
       <!-- 日期选择器 -->
       <date-selector :dates="dates"></date-selector>
       <!-- 过滤器 -->
-      <cinemas-filter @open="handleOpen" @close="handleClose" :isClose="isClose"></cinemas-filter>
+      <cinemas-filter :filterCinemas="filterCinemas" @open="handleOpen" @close="handleClose" :isClose="isClose"></cinemas-filter>
     </div>
   </div>
 </template>
@@ -22,7 +22,7 @@ import movieDetail from "@/components/MovieDetailAndCinemas/movieDetail";
 import dateSelector from "@/components/MovieDetailAndCinemas/dateSelector";
 import cinemasFilter from "@/components/MovieDetailAndCinemas/filter";
 import { mapGetters } from "vuex";
-import { getmovieDetail, getMoiveCinemas } from "@/apis/api";
+import { getmovieDetail, getMoiveCinemas, getFilterCinemas } from "@/apis/api";
 import moment from "moment";
 export default {
   name: "MovieDetailAndCinemas",
@@ -30,6 +30,7 @@ export default {
     return {
       detailMovie: {}, // 对应movieId的电影详情
       showDays: [], // 电影上映的时间列表
+      filterCinemas: {}, // 过滤器数据对象
       isFixed: false, // 控制日期选择器和过滤器的打开/关闭
       isClose: false // 控制过滤器的tab页打开/关闭
     };
@@ -102,11 +103,28 @@ export default {
         res = res.data;
         this.showDays = res.showDays;
       });
+    },
+    _getFilterCinemas(day) {
+      const p = {
+        movieId: this.movieId,
+        day: day
+      };
+      getFilterCinemas(p)
+        .then(res => {
+          res = res.data;
+          this.filterCinemas = res;
+        })
+        .catch(err => console.log(err));
     }
   },
   created() {
     this._getmovieDetail();
     this._getMoiveCinemas(
+      moment(this.rt).isBefore(moment().format("YYYY-MM-DD"))
+        ? moment().format("YYYY-MM-DD")
+        : this.rt
+    );
+    this._getFilterCinemas(
       moment(this.rt).isBefore(moment().format("YYYY-MM-DD"))
         ? moment().format("YYYY-MM-DD")
         : this.rt

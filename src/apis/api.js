@@ -45,3 +45,8 @@ export const getmovieDetail = params => get("/ajax/detailmovie", params);
  * @param {any} params
  */
 export const getMoiveCinemas = params => post("/ajax/movie", params);
+/**
+ * 获取电影院过滤器数据
+ * @param {any} params
+ */
+export const getFilterCinemas = params => get("/ajax/filterCinemas", params);

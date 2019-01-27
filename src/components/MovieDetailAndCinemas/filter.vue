@@ -17,32 +17,50 @@
       <!-- 全城tab页内容 -->
       <div class="region-tab" v-show="tabNumber === 0">
         <div class="tabs">
-          <div class="tab" :class="{active: regionTabNumber === 1}" @click="handleChangeRegionTabNum(1)">商区</div>
-          <div class="tab" :class="{active: regionTabNumber === 2}" @click="handleChangeRegionTabNum(2)">地铁站</div>
+          <div class="tab" :class="{active: regionTabIndex === 1}" @click="handleChangeRegionTabIndex(1)">商区</div>
+          <div class="tab" :class="{active: regionTabIndex === 2}" @click="handleChangeRegionTabIndex(2)">地铁站</div>
         </div>
         <!-- 商区/地铁站内容 -->
-        <div class="region-content" v-show="regionTabNumber === 1">
+        <div class="region-content">
           <div class="content-left">
-            <div class="left-item" :class="{active: regionLeftTabIndex === 0}">全部(198)</div>
-            <div class="left-item">全部(198)</div>
-            <div class="left-item">全部(198)</div>
+            <div 
+              class="left-item" 
+              v-for="(item, index) in regionSubItems"
+              :key="index"
+              :class="{active: regionLeftTabIndex === index}"
+              v-text="item.name + '(' + item.count + ')'"
+              @click="handleChangeRegionLeftIndex(index, item.id)"
+            >
+            </div>
           </div>
           <div class="content-right">
-            <div class="right-item" :class="{active: regionRightTabIndex === 0}">
-              <i class="hook">√</i>
-              <span class="item-name">全部</span>
-              <span class="count">40</span>
+            <div 
+              class="right-item" 
+              v-for="(item, index) in regionSubSubItems"
+              :key="index"
+              :class="{active: regionRightTabIndex === index}"
+              @click="handleChangeRegionRightIndex(index, item.id)"
+            >
+              <i class="hook" v-show="regionRightTabIndex === index">√</i>
+              <span class="item-name" v-text="item.name"></span>
+              <span class="count" v-text="item.count"></span>
             </div>
           </div>
         </div>
       </div>
       <!-- 品牌tab页内容 -->
-      <div class="brank-tab" v-show="tabNumber === 1">
-        <div class="brank-list">
-          <div class="brank-item" :class="{active: brankIndex === 0}">
-            <i class="brank-hook">√</i>
-            <span class="brank-name">全部</span>
-            <span class="brank-count">40</span>
+      <div class="brand-tab" v-show="tabNumber === 1">
+        <div class="brand-list">
+          <div 
+            class="brand-item" 
+            v-for="(item, index) in brandSubItems"
+            :key="index"
+            :class="{active: brankIndex === index}"
+            @click="handleChangeBrandIndex(index, item.id)"
+          >
+            <i class="brand-hook" v-show="brankIndex === index">√</i>
+            <span class="brand-name" v-text="item.name"></span>
+            <span class="brand-count" v-text="item.count"></span>
           </div>
         </div>
       </div>
@@ -51,28 +69,32 @@
           <div class="content service">
             <div class="title">特色功能</div>
             <div class="list">
-              <div class="item active">全部</div>
-              <div class="item">全部</div>
-              <div class="item">全部</div>
-              <div class="item">全部</div>
-              <div class="item">全部</div>
-              <div class="item">全部</div>
-              <div class="item">全部</div>
-              <div class="item">全部</div>
-              <div class="item">全部</div>
+              <div 
+              class="item"
+              v-for="(item, index) in serviceSubItems" 
+              :key="index"
+              :class="{active: featureSeriveIndex === index}"
+              v-text="item.name"
+              @click="handleChangeFeatureSeriveIndex(index, item.id)"
+              ></div>
             </div>
           </div>
           <div class="content halltype">
             <div class="title">特色功能</div>
             <div class="list">
-              <div class="item active">全部</div>
-              <div class="item">全部</div>
-              <div class="item">全部</div>
+               <div 
+              class="item"
+              v-for="(item, index) in hallTypeSubItems" 
+              :key="index"
+              :class="{active: featureHallTypeIndex === index}"
+              v-text="item.name"
+              @click="handleChangeFeatureHallTypeIndex(index, item.id)"
+              ></div>
             </div>
           </div>
         </div>
         <div class="feature-bottom">
-          <div class="btn reset">重置</div>
+          <div class="btn reset" @click="handleFeatureReset">重置</div>
           <div class="btn enter">确定</div>
         </div>
       </div>
@@ -84,24 +106,91 @@
 export default {
   name: "cinemas-filter",
   props: {
-    isClose: Boolean
+    isClose: Boolean,
+    filterCinemas: Object
   },
   data() {
     return {
-      region: "全城",
-      brank: "品牌",
-      feature: "特色",
+      regionName: "全城",
+      brandName: "品牌",
+      featureName: "特色",
       tabNumber: 4, // 当前展示的tab页面索引
       oldTabNumber: 4, // 上一次展示的tab页面索引
-      regionTabNumber: 1, // 用于控制region页面中的头部选项卡激活样式
+      regionTabIndex: 1, // 用于控制region页面中的头部选项卡激活样式
       regionLeftTabIndex: 0, // 用于控制region内容页面中的左边激活样式
       regionRightTabIndex: 0, // 用于控制region内容页面中的右边激活样式
-      brankIndex: 0 // 用于控制brank内容页面的激活样式
+      brankIndex: 0, // 用于控制brank内容页面的激活样式
+      featureSeriveIndex: 0, // 用于控制fearture内容页面中的特色功能激活样式
+      featureHallTypeIndex: 0 // 用于控制fearture内容页面中的特殊厅激活样式
     };
   },
   computed: {
     filterList() {
-      return [this.region, this.brank, this.feature];
+      return [this.regionName, this.brandName, this.featureName];
+    },
+    brand() {
+      return this.filterCinemas.brand || {};
+    },
+    brandSubItems() {
+      // 品牌数据
+      return this.brand.subItems || [];
+    },
+    district() {
+      return this.filterCinemas.district || {};
+    },
+    districtSubItems() {
+      // 商区数据
+      return this.district.subItems || [];
+    },
+    districtSubItemsByIndex() {
+      return this.districtSubItems[this.regionLeftTabIndex] || {};
+    },
+    districtSubSubItems() {
+      // 商区/区域数据
+      return this.districtSubItemsByIndex.subItems || [];
+    },
+    hallType() {
+      return this.filterCinemas.hallType || {};
+    },
+    hallTypeSubItems() {
+      // 特殊厅数据
+      return this.hallType.subItems || [];
+    },
+    service() {
+      return this.filterCinemas.service || {};
+    },
+    serviceSubItems() {
+      // 特色功能数据
+      return this.service.subItems || [];
+    },
+    subway() {
+      return this.filterCinemas.subway || {};
+    },
+    subwaySubItems() {
+      // 地铁数据
+      return this.subway.subItems || [];
+    },
+    subwaySubItemsByIndex() {
+      // 地铁数据
+      return this.subwaySubItems[this.regionLeftTabIndex] || {};
+    },
+    subwaySubSubItems() {
+      // 地铁/子数据
+      return this.subwaySubItemsByIndex.subItems || [];
+    },
+    regionSubItems() {
+      // 集成 商区/地铁数据
+      if (this.regionTabIndex === 1) {
+        return this.districtSubItems;
+      }
+      return this.subwaySubItems;
+    },
+    regionSubSubItems() {
+      // 集成 商区/地铁子数据
+      if (this.regionTabIndex === 1) {
+        return this.districtSubSubItems;
+      }
+      return this.subwaySubSubItems;
     }
   },
   methods: {
@@ -123,8 +212,45 @@ export default {
     /**
      *  用于切换region页的内容
      */
-    handleChangeRegionTabNum(tabNum) {
-      this.regionTabNumber = tabNum;
+    handleChangeRegionTabIndex(tabNum) {
+      this.regionTabIndex = tabNum;
+    },
+    /**
+     *  用于切换region页内容左侧的激活样式
+     */
+    handleChangeRegionLeftIndex(index, id) {
+      this.regionLeftTabIndex = index;
+    },
+    /**
+     *  用于切换region页内容右侧的激活样式
+     */
+    handleChangeRegionRightIndex(index, id) {
+      this.regionRightTabIndex = index;
+    },
+    /**
+     *  用于切换brand页内容激活样式
+     */
+    handleChangeBrandIndex(index, id) {
+      this.brankIndex = index;
+    },
+    /**
+     *  用于切换feature页内容service的激活样式
+     */
+    handleChangeFeatureSeriveIndex(index, id) {
+      this.featureSeriveIndex = index;
+    },
+    /**
+     *  用于切换feature页内容hallType的激活样式
+     */
+    handleChangeFeatureHallTypeIndex(index, id) {
+      this.featureHallTypeIndex = index;
+    },
+    /**
+     *  用于重置feature页的选择
+     */
+    handleFeatureReset() {
+      this.featureSeriveIndex = 0;
+      this.featureHallTypeIndex = 0;
     }
   },
   watch: {
@@ -200,10 +326,15 @@ export default {
       }
       .region-content {
         display: flex;
-        height: px2rem(870);
         font-size: px2rem(28);
         .content-left {
           width: 30%;
+          height: px2rem(870);
+          overflow-y: scroll;
+          overflow-x: hidden;
+          &::-webkit-scrollbar {
+            display: none;
+          }
           .left-item {
             line-height: px2rem(88);
             padding-left: px2rem(20);
@@ -215,7 +346,13 @@ export default {
         }
         .content-right {
           width: 70%;
+          height: px2rem(870);
           background-color: #f5f5f5;
+          overflow-y: scroll;
+          overflow-x: hidden;
+          &::-webkit-scrollbar {
+            display: none;
+          }
           .right-item {
             display: flex;
             justify-content: space-between;
@@ -223,10 +360,13 @@ export default {
             padding-left: px2rem(50);
             &.active {
               color: $btnColor;
+              .item-name {
+                padding-left: px2rem(12);
+              }
             }
             .item-name {
               flex: 1;
-              padding-left: px2rem(12);
+              padding-left: px2rem(32);
             }
             .count {
               font-size: px2rem(24);
@@ -236,12 +376,15 @@ export default {
         }
       }
     }
-    .brank-tab {
-      height: px2rem(704);
-      .brank-list {
+    .brand-tab {
+      .brand-list {
+        height: px2rem(704);
         overflow-y: scroll;
         overflow-x: hidden;
-        .brank-item {
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        .brand-item {
           display: flex;
           justify-content: space-between;
           height: px2rem(88);
@@ -249,15 +392,18 @@ export default {
           border-bottom: px2rem(1) solid #e5e5e5;
           &.active {
             color: $btnColor;
+            .brand-name {
+              margin-left: px2rem(18);
+            }
           }
-          .brank-hook {
+          .brand-hook {
             margin-left: px2rem(20);
           }
-          .brank-name {
+          .brand-name {
             flex: 1;
-            margin-left: px2rem(18);
+            margin-left: px2rem(56);
           }
-          .brank-count {
+          .brand-count {
             font-size: px2rem(24);
             margin-right: px2rem(90);
           }
@@ -269,6 +415,9 @@ export default {
         height: px2rem(600);
         overflow-y: scroll;
         overflow-x: hidden;
+        &::-webkit-scrollbar {
+          display: none;
+        }
         .content {
           .title {
             margin: px2rem(22) 0 0 px2rem(24);
@@ -289,6 +438,7 @@ export default {
               border-radius: px2rem(10);
               margin-top: px2rem(20);
               margin-right: 2.67%;
+              @include ellipsis();
               &.active {
                 color: $btnColor;
                 border: px2rem(1) solid $btnColor;
