@@ -327,9 +327,10 @@ export default {
       .region-content {
         display: flex;
         font-size: px2rem(28);
+        height: px2rem(870);
         .content-left {
           width: 30%;
-          height: px2rem(870);
+          height: 100%;
           overflow-y: scroll;
           overflow-x: hidden;
           &::-webkit-scrollbar {
@@ -346,7 +347,7 @@ export default {
         }
         .content-right {
           width: 70%;
-          height: px2rem(870);
+          height: 100%;
           background-color: #f5f5f5;
           overflow-y: scroll;
           overflow-x: hidden;
