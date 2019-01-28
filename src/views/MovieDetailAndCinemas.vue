@@ -14,7 +14,18 @@
       <!-- 日期选择器 -->
       <date-selector :dates="dates" @changeDate="handleChangeDate"></date-selector>
       <!-- 过滤器 -->
-      <cinemas-filter :filterCinemas="filterCinemas" @open="handleOpen" @close="handleClose" :isClose="isClose"></cinemas-filter>
+      <cinemas-filter 
+        :filterCinemas="filterCinemas"
+        :isClose="isClose"
+        @open="handleOpen" 
+        @close="handleClose"
+        @changeRegionLeftIndex="handleChangeRegionLeftIndex"
+        @changeRegionRightIndex="handleChangeRegionRightIndex"
+        @changeBrandIndex="handleChangeBrandIndex"
+        @changeFeatureSeriveIndex="handleChangeFeatureSeriveIndex"
+        @changeFeatureHallTypeIndex="handleChangeFeatureHallTypeIndex"
+        @featureCommit="handleFeatureCommit"
+      ></cinemas-filter>
     </div>
     <!-- 电影院列表 -->
     <cinemas-list :class="{cinemas:isFixed2}" :cinemas="cinemas" :pading="pading"></cinemas-list>
@@ -40,11 +51,18 @@ export default {
       cinemas: [], // 电影院列表
       pading: {}, // 电影院相关信息 - 总数，分页，是否还有更多...
       isFixed: false, // 控制日期选择器和过滤器的打开/关闭  第一种定位样式
-      isClose: false, // 控制过滤器的tab页打开/关闭
+      isClose: false, // 控制过滤器的tab页打开/关闭 - 于过滤器进行通信
       isFixed1: false, // 控制日期选择器和过滤器的打开/关闭  第二种定位样式
       isFixed2: false, // 控制日期选择器和过滤器的打开/关闭  第三种定位样式
       day: "", // 用于记录当前选择的日期
-      localRT: ""
+      localRT: "",
+      districtId: -1,
+      areaId: -1,
+      lineId: -1,
+      hallType: -1,
+      brandId: -1,
+      serviceId: -1,
+      stationId: -1
     };
   },
   computed: {
@@ -118,18 +136,40 @@ export default {
       this._getMoiveCinemas();
       this._getFilterCinemas();
     },
-    /**
-     *  获取电影详细信息
-     */
-    _getmovieDetail() {
-      const p = {
-        movieId: this.movieId
-      };
-      getmovieDetail(p).then(res => {
-        res = res.data;
-        this.detailMovie = res.detailMovie;
-        this.localRT = res.detailMovie.rt; // 代表在本页面获取的上映时间
-      });
+    handleChangeRegionLeftIndex(id) {
+      // 重复点击直接返回
+      if (this.districtId === id) {
+        return;
+      }
+      // 说明点击了左侧的全部
+      if (id === -1) {
+        this.districtId = id;
+        this.areaId = id;
+        this._getMoiveCinemas();
+        this.handleClose();
+        return;
+      }
+      this.districtId = id;
+    },
+    handleChangeRegionRightIndex(id) {
+      this.areaId = id;
+      this._getMoiveCinemas();
+      this.handleClose();
+    },
+    handleChangeBrandIndex(id) {
+      this.brandId = id;
+      this._getMoiveCinemas();
+      this.handleClose();
+    },
+    handleChangeFeatureSeriveIndex(id) {
+      this.serviceId = id;
+    },
+    handleChangeFeatureHallTypeIndex(id) {
+      this.hallType = id;
+    },
+    handleFeatureCommit() {
+      this._getMoiveCinemas();
+      this.handleClose();
     },
     _getMoiveCinemas() {
       // 发送请求前比较当前电影的上映时间与现在的大小进行选择
@@ -138,13 +178,13 @@ export default {
         day: this.day,
         offset: 0,
         limit: 20,
-        districtId: -1,
-        lineId: -1,
-        hallType: -1,
-        brandId: -1,
-        serviceId: -1,
-        areaId: -1,
-        stationId: -1,
+        districtId: this.districtId,
+        lineId: this.lineId,
+        hallType: this.hallType,
+        brandId: this.brandId,
+        serviceId: this.serviceId,
+        areaId: this.areaId,
+        stationId: this.stationId,
         item: "",
         updateShowDay: true,
         reqId: new Date().getTime(),

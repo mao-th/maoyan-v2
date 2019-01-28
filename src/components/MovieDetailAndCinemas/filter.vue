@@ -39,7 +39,7 @@
               v-for="(item, index) in regionSubSubItems"
               :key="index"
               :class="{active: regionRightTabIndex === index}"
-              @click="handleChangeRegionRightIndex(index, item.id)"
+              @click="handleChangeRegionRightIndex(index, item.id, item.name)"
             >
               <i class="hook" v-show="regionRightTabIndex === index">√</i>
               <span class="item-name" v-text="item.name"></span>
@@ -56,7 +56,7 @@
             v-for="(item, index) in brandSubItems"
             :key="index"
             :class="{active: brankIndex === index}"
-            @click="handleChangeBrandIndex(index, item.id)"
+            @click="handleChangeBrandIndex(index, item.id, item.name)"
           >
             <i class="brand-hook" v-show="brankIndex === index">√</i>
             <span class="brand-name" v-text="item.name"></span>
@@ -73,7 +73,7 @@
               class="item"
               v-for="(item, index) in serviceSubItems" 
               :key="index"
-              :class="{active: featureSeriveIndex === index}"
+              :class="{active: tmpFeatureSeriveIndex === index}"
               v-text="item.name"
               @click="handleChangeFeatureSeriveIndex(index, item.id)"
               ></div>
@@ -86,7 +86,7 @@
               class="item"
               v-for="(item, index) in hallTypeSubItems" 
               :key="index"
-              :class="{active: featureHallTypeIndex === index}"
+              :class="{active: tmpFeatureHallTypeIndex === index}"
               v-text="item.name"
               @click="handleChangeFeatureHallTypeIndex(index, item.id)"
               ></div>
@@ -95,7 +95,7 @@
         </div>
         <div class="feature-bottom">
           <div class="btn reset" @click="handleFeatureReset">重置</div>
-          <div class="btn enter">确定</div>
+          <div class="btn enter" @click="handleFeatureCommit">确定</div>
         </div>
       </div>
     </div>
@@ -121,7 +121,14 @@ export default {
       regionRightTabIndex: 0, // 用于控制region内容页面中的右边激活样式
       brankIndex: 0, // 用于控制brank内容页面的激活样式
       featureSeriveIndex: 0, // 用于控制fearture内容页面中的特色功能激活样式
-      featureHallTypeIndex: 0 // 用于控制fearture内容页面中的特殊厅激活样式
+      featureHallTypeIndex: 0, // 用于控制fearture内容页面中的特殊厅激活样式
+      tmpFeatureSeriveIndex: 0, // 中间值 - 用于记录选择后的激活的按钮
+      tmpFeatureHallTypeIndex: 0, // 中间值 - 用于记录选择后的激活的按钮
+      tmpServiceId: -1, // 中间值 - 用于记录选择后的选项
+      tmpHallType: -1, // 中间值 - 用于记录选择后的选项
+      newServiceId: -1, // 真正提交后的选项
+      newHallType: -1, // 真正提交后的选项
+      isCommit: false // 用于标记是否有操作过提交
     };
   },
   computed: {
@@ -216,49 +223,81 @@ export default {
       this.regionTabIndex = tabNum;
     },
     /**
-     *  用于切换region页内容左侧的激活样式
+     *  用于切换region页内容左栏的激活样式
      */
     handleChangeRegionLeftIndex(index, id) {
       this.regionLeftTabIndex = index;
+      this.$emit("changeRegionLeftIndex", id);
+      // 说明点击了全部
+      id === -1 ? (this.regionName = "全城") : false;
     },
     /**
-     *  用于切换region页内容右侧的激活样式
+     *  用于切换region页内容右栏的激活样式
      */
-    handleChangeRegionRightIndex(index, id) {
+    handleChangeRegionRightIndex(index, id, name) {
       this.regionRightTabIndex = index;
+      this.regionName = name;
+      this.$emit("changeRegionRightIndex", id);
     },
     /**
      *  用于切换brand页内容激活样式
      */
-    handleChangeBrandIndex(index, id) {
+    handleChangeBrandIndex(index, id, name) {
       this.brankIndex = index;
+      this.$emit("changeBrandIndex", id);
+      id === -1 ? (this.brandName = "品牌") : (this.brandName = name);
     },
     /**
-     *  用于切换feature页内容service的激活样式
+     *  用于记录临时的feature页内容service的激活状态
      */
     handleChangeFeatureSeriveIndex(index, id) {
-      this.featureSeriveIndex = index;
+      this.tmpFeatureSeriveIndex = index;
+      this.tmpServiceId = id;
     },
     /**
-     *  用于切换feature页内容hallType的激活样式
+     *  用于记录临时的feature页内容hallType的激活状态
      */
     handleChangeFeatureHallTypeIndex(index, id) {
-      this.featureHallTypeIndex = index;
+      this.tmpFeatureHallTypeIndex = index;
+      this.tmpHallType = id;
+    },
+    /***
+     *  用于提交 feature内容页面的选项
+     */
+    handleFeatureCommit() {
+      this.isCommit = true;
+      this.newServiceId = this.tmpServiceId;
+      this.newHallType = this.tmpHallType;
+      this.featureSeriveIndex = this.tmpFeatureSeriveIndex;
+      this.featureHallTypeIndex = this.tmpFeatureHallTypeIndex;
+      this.$emit("changeFeatureSeriveIndex", this.newServiceId);
+      this.$emit("changeFeatureHallTypeIndex", this.newHallType);
+      this.$emit("featureCommit");
     },
     /**
      *  用于重置feature页的选择
      */
     handleFeatureReset() {
-      this.featureSeriveIndex = 0;
-      this.featureHallTypeIndex = 0;
+      this.tmpFeatureSeriveIndex = 0;
+      this.tmpFeatureHallTypeIndex = 0;
     }
   },
   watch: {
     isClose() {
       if (this.isClose) {
-        console.log("filter - 关闭tab");
+        // console.log("filter - 关闭tab");
         this.oldTabNumber = 4;
         this.tabNumber = 4;
+        // 判断是否有点击提交
+        if (this.isCommit) {
+          this.isCommit = false;
+        } else {
+          // 恢复到原来状态
+          this.tmpFeatureSeriveIndex = this.featureSeriveIndex;
+          this.tmpFeatureHallTypeIndex = this.featureHallTypeIndex;
+          this.tmpServiceId = this.newServiceId;
+          this.tmpHallType = this.newHallType;
+        }
       }
     }
   }
