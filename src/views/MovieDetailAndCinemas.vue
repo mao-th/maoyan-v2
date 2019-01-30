@@ -28,7 +28,7 @@
       ></cinemas-filter>
     </div>
     <!-- 电影院列表 -->
-    <cinemas-list :class="{cinemas:isFixed2}" :cinemas="cinemas" :pading="pading"></cinemas-list>
+    <cinemas-list :class="{cinemas:isFixed2}" :cinemas="cinemas" :pading="pading" :movieId="movieId"></cinemas-list>
   </div>
 </template>
 

@@ -275,11 +275,13 @@ export default {
       this.$emit("featureCommit");
     },
     /**
-     *  用于重置feature页的选择
+     *  用于重置feature页的选择 - 2019-01-30 修改点击重置后重新发送请求参数异常的BUG
      */
     handleFeatureReset() {
       this.tmpFeatureSeriveIndex = 0;
       this.tmpFeatureHallTypeIndex = 0;
+      this.tmpServiceId = -1;
+      this.tmpHallType = -1;
     }
   },
   watch: {

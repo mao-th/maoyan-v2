@@ -1,7 +1,12 @@
 <template>
   <div id="cinema-list-wrap">
     <div class="cinema-list">
-      <div class="cinema-item" v-for="(item, index) in cinemas" :key="index">
+      <div 
+        class="cinema-item" 
+        v-for="(item, index) in cinemas" 
+        :key="index"
+        @click="handleToShows(item.id)"
+      >
         <div class="cinema-info">
           <div class="cinema-name-price">
             <span class="cinema-name" v-text="item.nm"></span>
@@ -37,7 +42,20 @@ export default {
   name: "cinemas-list",
   props: {
     cinemas: Array,
-    pading: Object
+    pading: Object,
+    movieId: String
+  },
+  methods: {
+    handleToShows(cinemaId) {
+      // 1.先完成跳转的实现。
+      this.$router.push({
+        path: "/shows/" + cinemaId,
+        query: {
+          movieId: this.movieId
+        }
+      });
+      // 2.完成根据电影id跳转的实现
+    }
   }
 };
 </script>

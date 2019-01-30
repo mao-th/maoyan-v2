@@ -50,3 +50,8 @@ export const getMoiveCinemas = params => post("/ajax/movie", params);
  * @param {any} params
  */
 export const getFilterCinemas = params => get("/ajax/filterCinemas", params);
+/**
+ *  获取电影院详情信息
+ * @param {any} params
+ */
+export const getCinemaDetail = params => get("/ajax/cinemaDetail", params);
