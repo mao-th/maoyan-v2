@@ -30,6 +30,10 @@ export default {
       this.selectIndex = index;
       this.$emit("changeDateIndex", index);
     }
+  },
+  activated() {
+    // 因为keep-alive的机制，所以在每次激活该组件时需要重置状态
+    this.selectIndex = 0;
   }
 };
 </script>

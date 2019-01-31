@@ -4,22 +4,25 @@
     <main-header :title="nm">
       <router-link :to="'/movieDetailAndCinemas/'+movieId" class="back" slot="left"></router-link>
     </main-header>
-    <!-- 地址 -->
-    <shows-address :cinemaData="cinemaData"></shows-address>
-    <!-- 滑动影片区域 + 电影信息 -->
-    <div class="movie-list-wrap"></div>
-    <!-- 电影信息 -->
-    <shows-movie-info :movieInfo="movieInfo"></shows-movie-info>
-    <!-- 日期切换tab标签 -->
-    <date-selector :shows="shows" @changeDateIndex="handleChangeDateIndex"></date-selector>
-    <!-- 影片当日播放时间信息 -->
-    <show-time-list :plist="plist" :vipInfo="vipInfo" :stone="stone"></show-time-list>
+    <div class="shows-content" v-if="isShow">
+      <!-- 地址 -->
+      <shows-address class="shows-address" :cinemaData="cinemaData"></shows-address>
+      <!-- 滑动影片区域 + 电影信息 -->
+      <shows-movie-list :movies="movies" :movieIndex="movieIndex" @changeMovieIndex="handleChangeMovieIndex"></shows-movie-list>
+      <!-- 电影信息 -->
+      <shows-movie-info class="shows-movie-info" :movieInfo="movieInfo"></shows-movie-info>
+      <!-- 日期切换tab标签 -->
+      <date-selector :shows="shows" @changeDateIndex="handleChangeDateIndex"></date-selector>
+      <!-- 影片当日播放时间信息 -->
+      <show-time-list :plist="plist" :vipInfo="vipInfo" :stone="stone" :dur="dur"></show-time-list>
+    </div>
   </div>
 </template>
 
 <script>
 import mainHeader from "@/components/common/main-header";
 import showsAddress from "@/components/Shows/shows-address";
+import showsMovieList from "@/components/Shows/shows-movieList";
 import dateSelector from "@/components/Shows/dateSelector";
 import showTimeList from "@/components/Shows/showTimeList";
 import showsMovieInfo from "@/components/Shows/shows-movieInfo";
@@ -32,7 +35,8 @@ export default {
       showData: {}, // 影片相关信息
       movieIndex: 0, // 当前选取的影片索引
       showsIndex: 0, // showTimeList的索引
-      stone: {} // 字体路径
+      stone: {}, // 字体路径
+      isShow: false
     };
   },
   computed: {
@@ -54,6 +58,9 @@ export default {
     movieInfo() {
       return this.movies[this.movieIndex] || {};
     },
+    dur() {
+      return this.movieInfo.dur || 0;
+    },
     shows() {
       return this.movieInfo.shows || [];
     },
@@ -70,6 +77,7 @@ export default {
   components: {
     mainHeader,
     showsAddress,
+    showsMovieList,
     showsMovieInfo,
     dateSelector,
     showTimeList
@@ -78,7 +86,11 @@ export default {
     handleChangeDateIndex(index) {
       this.showsIndex = index;
     },
+    handleChangeMovieIndex(index) {
+      this.movieIndex = index;
+    },
     _getCinemaDetail() {
+      this.isShow = false;
       const p = {
         cinemaId: this.cinemaId,
         movieId: this.movieId
@@ -91,11 +103,14 @@ export default {
           this.showData = res.showData;
           this.movieIndex = res.movieIndex;
           this.stone = res.stone;
+          this.$nextTick(() => {
+            this.isShow = true;
+          });
         })
         .catch(err => console.log(err));
     }
   },
-  activated() {
+  created() {
     this._getCinemaDetail();
   }
 };
@@ -112,10 +127,16 @@ export default {
   &::-webkit-scrollbar {
     display: none;
   }
-  .movie-list-wrap {
-    height: px2rem(270);
-    background-color: #000;
-    opacity: 0.55;
+  .shows-content {
+    position: relative;
+    .shows-address {
+      position: relative;
+      z-index: 1;
+    }
+    .shows-movie-info {
+      position: relative;
+      z-index: 1;
+    }
   }
 }
 </style>

@@ -9,7 +9,7 @@
       <div class="showtime-item" v-for="(item, index) in plist" :key="index">
         <div class="time-block">
           <div class="start-time" v-text="item.tm"></div>
-          <div class="end-time">11:44 散场</div>
+          <div class="end-time">{{ item.tm | endTimeFilter(item.dt, dur) }} 散场</div>
         </div>
         <div class="info-block">
           <div class="language" v-text="item.lang + ' ' + item.tp"></div>
@@ -34,13 +34,15 @@
 </template>
 
 <script>
+import moment from "moment";
 import maoButton from "@/components/common/mao-button";
 export default {
   name: "showTime-list",
   props: {
     plist: Array,
     vipInfo: Array,
-    stone: Object
+    stone: Object,
+    dur: Number
   },
   computed: {
     fonts() {
@@ -51,9 +53,18 @@ export default {
       return this.fonts.woff || "";
     }
   },
+  filters: {
+    endTimeFilter(startTime, dateTime, dur) {
+      startTime = dateTime + " " + startTime;
+      return moment(startTime)
+        .add(dur, "minutes")
+        .format("HH:mm");
+    }
+  },
   components: {
     maoButton
-  }
+  },
+  created() {}
 };
 </script>
 
@@ -123,7 +134,7 @@ export default {
           margin-top: px2rem(14);
         }
         .halltype {
-          margin-top: px2rem(6);
+          margin-top: px2rem(8);
         }
       }
       .price {
@@ -157,6 +168,9 @@ export default {
             color: #fff;
             background-color: #f90;
           }
+        }
+        .vip-desc {
+          margin-top: px2rem(4);
         }
       }
     }

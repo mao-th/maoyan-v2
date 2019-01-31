@@ -23,16 +23,16 @@ export default {
   },
   computed: {
     nm() {
-      return this.movieInfo.nm;
+      return this.movieInfo.nm || "";
     },
     wish() {
-      return this.movieInfo.wish;
+      return this.movieInfo.wish || 0;
     },
     sc() {
-      return this.movieInfo.sc;
+      return this.movieInfo.sc || "";
     },
     desc() {
-      return this.movieInfo.desc;
+      return this.movieInfo.desc || "";
     }
   }
 };
