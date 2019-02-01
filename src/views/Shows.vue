@@ -15,6 +15,8 @@
       <date-selector :shows="shows" @changeDateIndex="handleChangeDateIndex"></date-selector>
       <!-- 影片当日播放时间信息 -->
       <show-time-list :plist="plist" :vipInfo="vipInfo" :stone="stone" :dur="dur"></show-time-list>
+      <!-- 影院套餐 -->
+      <shows-deal-list :dealList="dealList"></shows-deal-list>
     </div>
   </div>
 </template>
@@ -26,6 +28,7 @@ import showsMovieList from "@/components/Shows/shows-movieList";
 import dateSelector from "@/components/Shows/dateSelector";
 import showTimeList from "@/components/Shows/showTimeList";
 import showsMovieInfo from "@/components/Shows/shows-movieInfo";
+import showsDealList from "@/components/Shows/shows-dealList";
 import { getCinemaDetail } from "@/apis/api";
 export default {
   name: "Shows",
@@ -36,6 +39,7 @@ export default {
       movieIndex: 0, // 当前选取的影片索引
       showsIndex: 0, // showTimeList的索引
       stone: {}, // 字体路径
+      dealList: {}, // 影院套餐
       isShow: false
     };
   },
@@ -80,14 +84,24 @@ export default {
     showsMovieList,
     showsMovieInfo,
     dateSelector,
-    showTimeList
+    showTimeList,
+    showsDealList
   },
   methods: {
     handleChangeDateIndex(index) {
       this.showsIndex = index;
     },
-    handleChangeMovieIndex(index) {
+    handleChangeMovieIndex(index, movieId) {
       this.movieIndex = index;
+      /**
+       *  新增： 在切换了影片信息后把url的查询字符串也进行替换
+       */
+      this.$router.replace({
+        path: "/shows/" + this.cinemaId,
+        query: {
+          movieId: movieId
+        }
+      });
     },
     _getCinemaDetail() {
       this.isShow = false;
@@ -103,6 +117,7 @@ export default {
           this.showData = res.showData;
           this.movieIndex = res.movieIndex;
           this.stone = res.stone;
+          this.dealList = res.dealList;
           this.$nextTick(() => {
             this.isShow = true;
           });

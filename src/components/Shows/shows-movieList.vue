@@ -48,7 +48,6 @@ export default {
       return this.$refs.mySwiper.swiper;
     },
     bgImgUrl() {
-      console.log(this.filterUrl);
       return {
         "background-image": "url(" + this.filterUrl + ")"
       };
@@ -71,7 +70,7 @@ export default {
       let index = this.swiper.activeIndex;
       this.slideIndex = index;
       this.imgUrl = this.movies[index].img;
-      this.$emit("changeMovieIndex", index);
+      this.$emit("changeMovieIndex", index, this.movies[index].id);
     }
   },
   created() {

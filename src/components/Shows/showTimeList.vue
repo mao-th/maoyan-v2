@@ -72,6 +72,7 @@ export default {
 #showtime-list-wrap {
   font-size: px2rem(24);
   background-color: #fff;
+  margin-bottom: px2rem(20);
   .vip-tips {
     display: flex;
     justify-content: space-between;
