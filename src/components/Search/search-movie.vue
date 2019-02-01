@@ -3,7 +3,7 @@
     <div class="movie-title">电影/电视剧/综艺</div>
     <div class="movie-list">
       <div class="movie-item" v-for="item in filterList" :key="item.id">
-        <img class="image" :src="item.img | imgFilter" alt="影片海报">
+        <img class="image" :src="item.img | imgFilter" alt="影片海报" />
         <div class="movie-info">
           <div class="info-title">
             <div class="info-title-left">
@@ -15,12 +15,12 @@
                 <span class="no-sc">暂无评分</span>
               </template>
               <template v-else-if="item.sc == 0">
-                  <span class="person" v-text="item.wish"></span>
-                  <span>人想看</span>
+                <span class="person" v-text="item.wish"></span>
+                <span>人想看</span>
               </template>
               <template v-else>
-                  <span class="sc" v-text="item.sc"></span>
-                  <span>分</span>
+                <span class="sc" v-text="item.sc"></span>
+                <span>分</span>
               </template>
             </div>
           </div>
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="more-result" v-if="total > 3">查看全部{{total}}部影视剧</div>
+    <div class="more-result" v-if="total > 3">查看全部{{ total }}部影视剧</div>
   </div>
 </template>
 

@@ -4,7 +4,7 @@
     <div class="deal-list">
       <div class="deal-item" v-for="(item, index) in dealsList" :key="index">
         <div class="deal-img">
-          <img :src="item.imageUrl | filterImg" alt="套餐图片">
+          <img :src="item.imageUrl | filterImg" alt="套餐图片" />
         </div>
         <div class="deal-info">
           <div class="info-title">

@@ -9,7 +9,9 @@
       <div class="showtime-item" v-for="(item, index) in plist" :key="index">
         <div class="time-block">
           <div class="start-time" v-text="item.tm"></div>
-          <div class="end-time">{{ item.tm | endTimeFilter(item.dt, dur) }} 散场</div>
+          <div class="end-time">
+            {{ item.tm | endTimeFilter(item.dt, dur) }} 散场
+          </div>
         </div>
         <div class="info-block">
           <div class="language" v-text="item.lang + ' ' + item.tp"></div>

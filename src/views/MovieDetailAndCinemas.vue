@@ -7,14 +7,17 @@
       <router-link to="/movie" class="back" slot="left"></router-link>
     </main-header>
     <transition name="fade">
-      <div v-show="!isLoading">
+      <div v-show="cinemas.length">
         <!-- MovieDetail 部分 -->
         <div ref="detailMovie">
           <movie-detail :detailMovie="detailMovie"></movie-detail>
         </div>
-        <div :class="{active: isFixed, active1: isFixed1, active2: isFixed2}">
+        <div :class="{ active: isFixed, active1: isFixed1, active2: isFixed2 }">
           <!-- 日期选择器 -->
-          <date-selector :dates="dates" @changeDate="handleChangeDate"></date-selector>
+          <date-selector
+            :dates="dates"
+            @changeDate="handleChangeDate"
+          ></date-selector>
           <!-- 过滤器 -->
           <cinemas-filter
             :filterCinemas="filterCinemas"
@@ -31,19 +34,17 @@
         </div>
         <!-- 电影院列表 -->
         <cinemas-list
-          :class="{cinemas:isFixed2}"
+          :class="{ cinemas: isFixed2 }"
           :cinemas="cinemas"
           :pading="pading"
           :movieId="movieId"
         ></cinemas-list>
       </div>
     </transition>
-    <loading v-show="isLoading"></loading>
   </div>
 </template>
 
 <script>
-import loading from "@/components/common/loading/mao-loading";
 import mainHeader from "@/components/common/main-header";
 import movieDetail from "@/components/MovieDetailAndCinemas/movieDetail";
 import dateSelector from "@/components/MovieDetailAndCinemas/dateSelector";
@@ -101,8 +102,7 @@ export default {
     movieDetail,
     dateSelector,
     cinemasFilter,
-    cinemasList,
-    loading
+    cinemasList
   },
   methods: {
     /**
@@ -231,7 +231,9 @@ export default {
         this.cinemas = res.cinemas;
         this.pading = res.pading;
         this.$nextTick(() => {
-          this.isLoading = false;
+          setTimeout(() => {
+            this.$loading.remove();
+          }, 500);
         });
       });
     },
@@ -259,7 +261,7 @@ export default {
 
     // 应用promise控制请求的依赖顺序
     new Promise(resolve => {
-      this.isLoading = true;
+      this.$loading.show();
       const p = {
         movieId: this.movieId
       };
@@ -328,7 +330,7 @@ export default {
   }
   // vue - 过渡
   .fade-enter-active {
-    transition: opacity 0.8s;
+    transition: opacity 0.2s;
   }
   .fade-enter {
     opacity: 0;

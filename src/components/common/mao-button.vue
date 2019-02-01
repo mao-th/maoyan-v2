@@ -1,5 +1,9 @@
 <template>
-  <div class="btn" :style="{ backgroundColor: btnColor }" v-text="btnContent"></div>
+  <div
+    class="btn"
+    :style="{ backgroundColor: btnColor }"
+    v-text="btnContent"
+  ></div>
 </template>
 
 <script>

@@ -2,19 +2,41 @@
   <div id="shows-wrap">
     <!-- 头部 -->
     <main-header :title="nm">
-      <router-link :to="'/movieDetailAndCinemas/'+movieId" class="back" slot="left"></router-link>
+      <router-link
+        :to="'/movieDetailAndCinemas/' + movieId"
+        class="back"
+        slot="left"
+      ></router-link>
     </main-header>
     <div class="shows-content" v-if="isShow">
       <!-- 地址 -->
-      <shows-address class="shows-address" :cinemaData="cinemaData"></shows-address>
+      <shows-address
+        class="shows-address"
+        :cinemaData="cinemaData"
+      ></shows-address>
       <!-- 滑动影片区域 + 电影信息 -->
-      <shows-movie-list :movies="movies" :movieIndex="movieIndex" @changeMovieIndex="handleChangeMovieIndex"></shows-movie-list>
+      <shows-movie-list
+        :movies="movies"
+        :movieIndex="movieIndex"
+        @changeMovieIndex="handleChangeMovieIndex"
+      ></shows-movie-list>
       <!-- 电影信息 -->
-      <shows-movie-info class="shows-movie-info" :movieInfo="movieInfo"></shows-movie-info>
+      <shows-movie-info
+        class="shows-movie-info"
+        :movieInfo="movieInfo"
+      ></shows-movie-info>
       <!-- 日期切换tab标签 -->
-      <date-selector :shows="shows" @changeDateIndex="handleChangeDateIndex"></date-selector>
+      <date-selector
+        :shows="shows"
+        @changeDateIndex="handleChangeDateIndex"
+      ></date-selector>
       <!-- 影片当日播放时间信息 -->
-      <show-time-list :plist="plist" :vipInfo="vipInfo" :stone="stone" :dur="dur"></show-time-list>
+      <show-time-list
+        :plist="plist"
+        :vipInfo="vipInfo"
+        :stone="stone"
+        :dur="dur"
+      ></show-time-list>
       <!-- 影院套餐 -->
       <shows-deal-list :dealList="dealList"></shows-deal-list>
     </div>

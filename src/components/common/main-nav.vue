@@ -1,17 +1,17 @@
 <template>
   <div id="main-nav">
-      <div class="nav-item active">
-        <i class="iconfont icon-dianying"></i>
-        <div class="nav-name">电影</div>
-      </div>
-      <div class="nav-item">
-        <i class="iconfont icon-yingyuana"></i>
-        <div class="nav-name">影院</div>
-      </div>
-      <div class="nav-item">
-        <i class="iconfont icon-tubiaolunkuo-"></i>
-        <div class="nav-name">我的</div>
-      </div>
+    <div class="nav-item active">
+      <i class="iconfont icon-dianying"></i>
+      <div class="nav-name">电影</div>
+    </div>
+    <div class="nav-item">
+      <i class="iconfont icon-yingyuana"></i>
+      <div class="nav-name">影院</div>
+    </div>
+    <div class="nav-item">
+      <i class="iconfont icon-tubiaolunkuo-"></i>
+      <div class="nav-name">我的</div>
+    </div>
   </div>
 </template>
 

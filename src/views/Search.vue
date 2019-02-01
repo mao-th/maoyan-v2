@@ -8,17 +8,35 @@
     <div class="search-hearder">
       <div class="search-input">
         <i class="iconfont icon-sousuo"></i>
-        <input v-model="keyWord" @input="handleInput" type="text" placeholder="搜电影、搜影院" ref="input">
-        <i class="iconfont icon-guanbi" v-show="keyWord.length" @click="handleClear"></i>
+        <input
+          v-model="keyWord"
+          @input="handleInput"
+          type="text"
+          placeholder="搜电影、搜影院"
+          ref="input"
+        />
+        <i
+          class="iconfont icon-guanbi"
+          v-show="keyWord.length"
+          @click="handleClear"
+        ></i>
       </div>
       <router-link to="/movie" tag="div" class="cancel">取消</router-link>
     </div>
     <!-- 热门搜索 -->
     <div class="hot-search" v-show="isShow">
       <ul class="search-list">
-        <li class="search-item" v-for="(item, index) in keyWordList" :key="index">
+        <li
+          class="search-item"
+          v-for="(item, index) in keyWordList"
+          :key="index"
+        >
           <i class="iconfont icon-jishi"></i>
-          <span class="search-kw" v-text="item" @click="handleSetKeyWord(item)"></span>
+          <span
+            class="search-kw"
+            v-text="item"
+            @click="handleSetKeyWord(item)"
+          ></span>
           <div class="delete-kw" @click="handleDeleteKeyWord(index)"></div>
         </li>
       </ul>

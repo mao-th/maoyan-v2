@@ -13,7 +13,11 @@
           <div class="cinema-address" v-text="item.addr"></div>
           <div class="feature-tags">
             <span v-if="item.sell">座</span>
-            <span v-for="(type, index) in item.hallType" :key="index" v-text="type"></span>
+            <span
+              v-for="(type, index) in item.hallType"
+              :key="index"
+              v-text="type"
+            ></span>
             <span v-if="item.snack" class="feature">小吃</span>
             <span v-if="item.vipDesc" class="feature">折扣卡</span>
           </div>

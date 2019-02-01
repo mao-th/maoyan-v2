@@ -2,19 +2,19 @@
   <div id="movie-list-wrap">
     <div class="bg filter"></div>
     <div class="bg img" :style="bgImgUrl"></div>
-    <swiper 
-      class="movie-list" 
-      :options="swiperOption" 
-      ref="mySwiper" 
+    <swiper
+      class="movie-list"
+      :options="swiperOption"
+      ref="mySwiper"
       @slideChange="handleSlideChange"
     >
-      <swiper-slide 
-        class="movie-item" 
-        v-for="(item, index) in movies" 
+      <swiper-slide
+        class="movie-item"
+        v-for="(item, index) in movies"
         :key="index"
-        :class="{active: slideIndex === index}"
+        :class="{ active: slideIndex === index }"
       >
-        <img :src="item.img | imgFilter" alt="影片海报">
+        <img :src="item.img | imgFilter" alt="影片海报" />
       </swiper-slide>
     </swiper>
   </div>

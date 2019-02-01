@@ -5,11 +5,10 @@
         class="date-item"
         v-for="(item, index) in shows"
         :key="index"
-        :class="{active: selectIndex == index}"
+        :class="{ active: selectIndex == index }"
         v-text="item.dateShow"
         @click="handleChangeDateIndex(index)"
-      >
-      </li>
+      ></li>
     </ul>
   </div>
 </template>

@@ -2,9 +2,10 @@
   <div id="filter-wrap">
     <!-- 过滤器选显卡部分 -->
     <div class="filter-list">
-      <div class="filter-item" 
-        :class="{active: tabNumber == index}" 
-        v-for="(item, index) in filterList" 
+      <div
+        class="filter-item"
+        :class="{ active: tabNumber == index }"
+        v-for="(item, index) in filterList"
         :key="index"
         @click="handleChangeTab(index)"
       >
@@ -17,28 +18,39 @@
       <!-- 全城tab页内容 -->
       <div class="region-tab" v-show="tabNumber === 0">
         <div class="tabs">
-          <div class="tab" :class="{active: regionTabIndex === 1}" @click="handleChangeRegionTabIndex(1)">商区</div>
-          <div class="tab" :class="{active: regionTabIndex === 2}" @click="handleChangeRegionTabIndex(2)">地铁站</div>
+          <div
+            class="tab"
+            :class="{ active: regionTabIndex === 1 }"
+            @click="handleChangeRegionTabIndex(1)"
+          >
+            商区
+          </div>
+          <div
+            class="tab"
+            :class="{ active: regionTabIndex === 2 }"
+            @click="handleChangeRegionTabIndex(2)"
+          >
+            地铁站
+          </div>
         </div>
         <!-- 商区/地铁站内容 -->
         <div class="region-content">
           <div class="content-left">
-            <div 
-              class="left-item" 
+            <div
+              class="left-item"
               v-for="(item, index) in regionSubItems"
               :key="index"
-              :class="{active: regionLeftTabIndex === index}"
+              :class="{ active: regionLeftTabIndex === index }"
               v-text="item.name + '(' + item.count + ')'"
               @click="handleChangeRegionLeftIndex(index, item.id)"
-            >
-            </div>
+            ></div>
           </div>
           <div class="content-right">
-            <div 
-              class="right-item" 
+            <div
+              class="right-item"
               v-for="(item, index) in regionSubSubItems"
               :key="index"
-              :class="{active: regionRightTabIndex === index}"
+              :class="{ active: regionRightTabIndex === index }"
               @click="handleChangeRegionRightIndex(index, item.id, item.name)"
             >
               <i class="hook" v-show="regionRightTabIndex === index">√</i>
@@ -51,11 +63,11 @@
       <!-- 品牌tab页内容 -->
       <div class="brand-tab" v-show="tabNumber === 1">
         <div class="brand-list">
-          <div 
-            class="brand-item" 
+          <div
+            class="brand-item"
             v-for="(item, index) in brandSubItems"
             :key="index"
-            :class="{active: brankIndex === index}"
+            :class="{ active: brankIndex === index }"
             @click="handleChangeBrandIndex(index, item.id, item.name)"
           >
             <i class="brand-hook" v-show="brankIndex === index">√</i>
@@ -69,26 +81,26 @@
           <div class="content service">
             <div class="title">特色功能</div>
             <div class="list">
-              <div 
-              class="item"
-              v-for="(item, index) in serviceSubItems" 
-              :key="index"
-              :class="{active: tmpFeatureSeriveIndex === index}"
-              v-text="item.name"
-              @click="handleChangeFeatureSeriveIndex(index, item.id)"
+              <div
+                class="item"
+                v-for="(item, index) in serviceSubItems"
+                :key="index"
+                :class="{ active: tmpFeatureSeriveIndex === index }"
+                v-text="item.name"
+                @click="handleChangeFeatureSeriveIndex(index, item.id)"
               ></div>
             </div>
           </div>
           <div class="content halltype">
             <div class="title">特色功能</div>
             <div class="list">
-               <div 
-              class="item"
-              v-for="(item, index) in hallTypeSubItems" 
-              :key="index"
-              :class="{active: tmpFeatureHallTypeIndex === index}"
-              v-text="item.name"
-              @click="handleChangeFeatureHallTypeIndex(index, item.id)"
+              <div
+                class="item"
+                v-for="(item, index) in hallTypeSubItems"
+                :key="index"
+                :class="{ active: tmpFeatureHallTypeIndex === index }"
+                v-text="item.name"
+                @click="handleChangeFeatureHallTypeIndex(index, item.id)"
               ></div>
             </div>
           </div>

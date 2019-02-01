@@ -1,19 +1,34 @@
-import loadingComponent from "./mao-loading";
+// import loadingComponent from "./mao-loading";
+import loadingComponent1 from "./mao-loading1";
 import Vue from "vue";
 
 let instance;
 
-const LoadingConstructor = Vue.extend(loadingComponent);
-
+const LoadingConstructor = Vue.extend(loadingComponent1);
 instance = new LoadingConstructor({
   el: document.createElement("div")
 });
-
-const loading = (options = {}) => {
-  if (options) {
-    // 遍历选项列表，然后对组件的组件的选项进行初始化
-    console.log("初始化");
+const loading = {
+  show: () => {
+    // 创建实例并进行挂载
+    document.body.appendChild(instance.$el);
+  },
+  remove: () => {
+    if (instance) {
+      document.body.removeChild(instance.$el);
+    }
   }
 };
-
-export default loading;
+// 应用上插件的方式
+export default {
+  install() {
+    if (!Vue.$loading) {
+      Vue.$loading = loading;
+    }
+    Vue.mixin({
+      created() {
+        this.$loading = Vue.$loading;
+      }
+    });
+  }
+};

@@ -1,45 +1,73 @@
 <template>
   <div id="city-list-container" ref="cityListContainer">
-    <div class="anchor-list" 
+    <div
+      class="anchor-list"
       @click="handleClickAnchor"
       @touchmove="handleTouchMove"
       @touchend="isTouch = false"
       ref="anchorList"
     >
       <div class="anchor-item" name="定位城市">定位</div>
-      <div class="anchor-item" name="最近访问城市" v-if="accessCityList.length">最近</div>
+      <div class="anchor-item" name="最近访问城市" v-if="accessCityList.length">
+        最近
+      </div>
       <div class="anchor-item" name="热门城市">热门</div>
-      <div class="anchor-item" v-for="item in AlphArray" :key="item" :name="item" v-text="item"></div>
+      <div
+        class="anchor-item"
+        v-for="item in AlphArray"
+        :key="item"
+        :name="item"
+        v-text="item"
+      ></div>
     </div>
     <div class="location-city">
       <div class="title">定位城市</div>
       <div class="city-list">
-        <div class="city-item location" @click="handleLocation" v-text="tipsMessage"></div>
+        <div
+          class="city-item location"
+          @click="handleLocation"
+          v-text="tipsMessage"
+        ></div>
       </div>
     </div>
     <div class="access-city-list" v-if="accessCityList.length">
       <div class="title">最近访问城市</div>
       <div class="city-list">
-        <div 
-          class="city-item item-btn" 
+        <div
+          class="city-item item-btn"
           v-for="item in accessCityList"
           :key="item.id"
           v-text="item.nm"
           @click="handleClickCity(item)"
-        >
-        </div>
+        ></div>
       </div>
     </div>
     <div class="hot-city-list">
       <div class="title">热门城市</div>
       <div class="city-list">
-        <div class="city-item item-btn" v-for="item in hotCityList" :key="item.id" @click="handleClickCity(item)" v-text="item.nm"></div>
+        <div
+          class="city-item item-btn"
+          v-for="item in hotCityList"
+          :key="item.id"
+          @click="handleClickCity(item)"
+          v-text="item.nm"
+        ></div>
       </div>
     </div>
-    <div class="city-list-v2" v-for="(cityList, key) in regulCityListObject" :key="key">
+    <div
+      class="city-list-v2"
+      v-for="(cityList, key) in regulCityListObject"
+      :key="key"
+    >
       <div class="title title-letter" v-text="key"></div>
       <div class="city-list2">
-        <div class="city-item2" v-for="item in cityList" :key="item.id" @click="handleClickCity(item)" v-text="item.nm"></div>
+        <div
+          class="city-item2"
+          v-for="item in cityList"
+          :key="item.id"
+          @click="handleClickCity(item)"
+          v-text="item.nm"
+        ></div>
       </div>
     </div>
   </div>

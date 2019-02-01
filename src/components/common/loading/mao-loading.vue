@@ -17,7 +17,7 @@ export default {
 <style lang="scss" scoped>
 #loading-container {
   position: fixed;
-  top: px2rem(200);
+  top: px2rem(190);
   left: 50%;
   transform: translateX(-50%);
   width: px2rem(180);

@@ -3,14 +3,14 @@
     <div class="background image" :style="bgImgObj"></div>
     <!-- 添加过滤层 -->
     <div class="background filter"></div>
-    <img class="img" :src="filterImgUrl" alt="影片海报">
+    <img class="img" :src="filterImgUrl" alt="影片海报" />
     <div class="movie-info">
       <h3 class="info-nm" v-text="nm"></h3>
       <div class="info-enm" v-text="enm"></div>
       <!-- 多状态部分 start -->
       <div class="info-score" v-if="sc">
         <span class="sc" v-text="sc"></span>
-        <span class="person">&nbsp;&nbsp;({{filterSnum}}万人评)</span>
+        <span class="person">&nbsp;&nbsp;({{ filterSnum }}万人评)</span>
       </div>
       <div class="info-wish" v-else>
         <span class="wish" v-text="wish + '人想看'"></span>

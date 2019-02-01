@@ -1,13 +1,16 @@
 <template>
   <div id="movie-list-v2" @scroll="isScroll && handlerTouchBottom($event)">
     <!-- 最受欢迎列表 -->
-    <div class="top-list-wrap"> 
+    <div class="top-list-wrap">
       <div class="list-title">近期最受期待</div>
-      <div class="list-wrap" @scroll.prevent="isScrollR && handlerTouchRight($event)">
+      <div
+        class="list-wrap"
+        @scroll.prevent="isScrollR && handlerTouchRight($event)"
+      >
         <div class="list-item" v-for="item in mostList" :key="item.id">
           <div class="movie-img">
             <!--  图片的展示在PC端观察会出现模糊的情况，但是在手机端观察正常（可能是hotcss中的东西导致） -->
-            <img class="image" :src="item.img | imgFilter1" alt="影片海报">
+            <img class="image" :src="item.img | imgFilter1" alt="影片海报" />
             <div class="bottom-wrap"></div>
             <div class="person-wish" v-text="item.wish + '人想看'"></div>
             <div class="collection">
@@ -15,7 +18,7 @@
             </div>
           </div>
           <div class="movie-name" v-text="item.nm"></div>
-          <div class="show-date">{{item.comingTitle | textFilter}}</div>
+          <div class="show-date">{{ item.comingTitle | textFilter }}</div>
         </div>
       </div>
     </div>
@@ -26,13 +29,13 @@
         <div class="movie-list">
           <div class="list-item" v-for="item in list" :key="item.id">
             <div class="movie-img">
-              <img class="image" :src="item.img | imgFilter2" alt="影片海报">
+              <img class="image" :src="item.img | imgFilter2" alt="影片海报" />
               <span class="promotion" v-if="item.haspromotionTag">特惠</span>
             </div>
             <div class="movie-info">
               <div class="info-title">
                 <span class="movie-name" v-text="item.nm"></span>
-                <i :class="'version '+item.version"></i>
+                <i :class="'version ' + item.version"></i>
                 <i v-if="item.preShow" class="pre-show"></i>
               </div>
               <div class="wantsee">

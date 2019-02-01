@@ -1,17 +1,17 @@
 <template>
-<!-- 通过一个标识符 isScroll 移除绑定的滚动事件监听 -->
-<!-- 但是在第二个处理函数必须写成带括号的调用形式并传入需要的参数才能生效 -->
+  <!-- 通过一个标识符 isScroll 移除绑定的滚动事件监听 -->
+  <!-- 但是在第二个处理函数必须写成带括号的调用形式并传入需要的参数才能生效 -->
   <div id="list-wrap" @scroll="isScroll && handlerTouchBottom($event)">
     <div class="movie-list">
-      <div 
-        class="movie-list-item" 
-        v-for="item in movieList" 
-        :key="item.id" 
+      <div
+        class="movie-list-item"
+        v-for="item in movieList"
+        :key="item.id"
         @click="handleToMovieDetailAndCinemas(item.id, item.rt)"
       >
         <!-- movie-image -->
         <div class="movie-item-left">
-          <img class="image" :src="item.img | imgFilter" alt="影片海报">
+          <img class="image" :src="item.img | imgFilter" alt="影片海报" />
           <span class="promotion" v-if="item.haspromotionTag">特惠</span>
         </div>
         <!-- movie-info -->
@@ -19,7 +19,7 @@
           <div class="movie-info">
             <div class="title">
               <span class="movie-name" v-text="item.nm"></span>
-              <i :class="'version '+item.version"></i>
+              <i :class="'version ' + item.version"></i>
               <i v-if="item.preShow" class="pre-show"></i>
             </div>
             <!-- 优化分数为0的展示 -->

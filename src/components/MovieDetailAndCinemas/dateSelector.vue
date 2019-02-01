@@ -1,14 +1,14 @@
 <template>
   <div id="date-selector">
     <ul class="date-list" ref="dateList">
-      <li 
-        class="date-item" 
-        :class="{active: selectIndex == index}" 
+      <li
+        class="date-item"
+        :class="{ active: selectIndex == index }"
         v-for="(item, index) in dates"
         :key="index"
         @click="handleChangeIndex($event, index)"
       >
-      {{ item.date | filtersMoment}}
+        {{ item.date | filtersMoment }}
       </li>
     </ul>
   </div>
