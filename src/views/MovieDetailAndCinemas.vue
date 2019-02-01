@@ -6,33 +6,44 @@
     <main-header :title="title">
       <router-link to="/movie" class="back" slot="left"></router-link>
     </main-header>
-    <div ref="detailMovie">
-    <!-- MovieDetail 部分 -->
-    <movie-detail :detailMovie="detailMovie"></movie-detail>
-    </div>
-    <div :class="{active: isFixed, active1: isFixed1, active2: isFixed2}">
-      <!-- 日期选择器 -->
-      <date-selector :dates="dates" @changeDate="handleChangeDate"></date-selector>
-      <!-- 过滤器 -->
-      <cinemas-filter 
-        :filterCinemas="filterCinemas"
-        :isClose="isClose"
-        @open="handleOpen" 
-        @close="handleClose"
-        @changeRegionLeftIndex="handleChangeRegionLeftIndex"
-        @changeRegionRightIndex="handleChangeRegionRightIndex"
-        @changeBrandIndex="handleChangeBrandIndex"
-        @changeFeatureSeriveIndex="handleChangeFeatureSeriveIndex"
-        @changeFeatureHallTypeIndex="handleChangeFeatureHallTypeIndex"
-        @featureCommit="handleFeatureCommit"
-      ></cinemas-filter>
-    </div>
-    <!-- 电影院列表 -->
-    <cinemas-list :class="{cinemas:isFixed2}" :cinemas="cinemas" :pading="pading" :movieId="movieId"></cinemas-list>
+    <transition name="fade">
+      <div v-show="!isLoading">
+        <!-- MovieDetail 部分 -->
+        <div ref="detailMovie">
+          <movie-detail :detailMovie="detailMovie"></movie-detail>
+        </div>
+        <div :class="{active: isFixed, active1: isFixed1, active2: isFixed2}">
+          <!-- 日期选择器 -->
+          <date-selector :dates="dates" @changeDate="handleChangeDate"></date-selector>
+          <!-- 过滤器 -->
+          <cinemas-filter
+            :filterCinemas="filterCinemas"
+            :isClose="isClose"
+            @open="handleOpen"
+            @close="handleClose"
+            @changeRegionLeftIndex="handleChangeRegionLeftIndex"
+            @changeRegionRightIndex="handleChangeRegionRightIndex"
+            @changeBrandIndex="handleChangeBrandIndex"
+            @changeFeatureSeriveIndex="handleChangeFeatureSeriveIndex"
+            @changeFeatureHallTypeIndex="handleChangeFeatureHallTypeIndex"
+            @featureCommit="handleFeatureCommit"
+          ></cinemas-filter>
+        </div>
+        <!-- 电影院列表 -->
+        <cinemas-list
+          :class="{cinemas:isFixed2}"
+          :cinemas="cinemas"
+          :pading="pading"
+          :movieId="movieId"
+        ></cinemas-list>
+      </div>
+    </transition>
+    <loading v-show="isLoading"></loading>
   </div>
 </template>
 
 <script>
+import loading from "@/components/common/loading/mao-loading";
 import mainHeader from "@/components/common/main-header";
 import movieDetail from "@/components/MovieDetailAndCinemas/movieDetail";
 import dateSelector from "@/components/MovieDetailAndCinemas/dateSelector";
@@ -54,6 +65,7 @@ export default {
       isClose: false, // 控制过滤器的tab页打开/关闭 - 于过滤器进行通信
       isFixed1: false, // 控制日期选择器和过滤器的打开/关闭  第二种定位样式
       isFixed2: false, // 控制日期选择器和过滤器的打开/关闭  第三种定位样式
+      isLoading: true, // 用于控制loading组件的展示和隐藏 -- 后面转js组件
       day: "", // 用于记录当前选择的日期
       localRT: "",
       districtId: -1,
@@ -89,7 +101,8 @@ export default {
     movieDetail,
     dateSelector,
     cinemasFilter,
-    cinemasList
+    cinemasList,
+    loading
   },
   methods: {
     /**
@@ -136,6 +149,9 @@ export default {
       this._getMoiveCinemas();
       this._getFilterCinemas();
     },
+    /**
+     *  用于处理全城左侧的选择
+     */
     handleChangeRegionLeftIndex(id) {
       // 重复点击直接返回
       if (this.districtId === id) {
@@ -151,26 +167,44 @@ export default {
       }
       this.districtId = id;
     },
+    /**
+     *  用于处理全城右侧的选择
+     */
     handleChangeRegionRightIndex(id) {
       this.areaId = id;
       this._getMoiveCinemas();
       this.handleClose();
     },
+    /**
+     *  用于处理品牌的选择
+     */
     handleChangeBrandIndex(id) {
       this.brandId = id;
       this._getMoiveCinemas();
       this.handleClose();
     },
+    /**
+     *  用于处理特色上部分的选择
+     */
     handleChangeFeatureSeriveIndex(id) {
       this.serviceId = id;
     },
+    /**
+     *  用于处理特色下部分的选择
+     */
     handleChangeFeatureHallTypeIndex(id) {
       this.hallType = id;
     },
+    /**
+     *  用于处理特色点击确认后的逻辑
+     */
     handleFeatureCommit() {
       this._getMoiveCinemas();
       this.handleClose();
     },
+    /**
+     *  获取电影院列表数据相关
+     */
     _getMoiveCinemas() {
       // 发送请求前比较当前电影的上映时间与现在的大小进行选择
       const p = {
@@ -196,8 +230,14 @@ export default {
         this.showDays = res.showDays;
         this.cinemas = res.cinemas;
         this.pading = res.pading;
+        this.$nextTick(() => {
+          this.isLoading = false;
+        });
       });
     },
+    /**
+     *  获取过滤器列表数据相关
+     */
     _getFilterCinemas() {
       const p = {
         movieId: this.movieId,
@@ -219,6 +259,7 @@ export default {
 
     // 应用promise控制请求的依赖顺序
     new Promise(resolve => {
+      this.isLoading = true;
       const p = {
         movieId: this.movieId
       };
@@ -226,6 +267,7 @@ export default {
         res = res.data;
         this.detailMovie = res.detailMovie;
         this.localRT = res.detailMovie.rt; // 代表在本页面获取的上映时间
+
         resolve();
       });
     }).then(() => {
@@ -246,6 +288,9 @@ export default {
   height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   .filter {
     position: fixed;
     top: 0;
@@ -280,6 +325,13 @@ export default {
   .cinemas {
     border-top: 0 none;
     margin-top: px2rem(180);
+  }
+  // vue - 过渡
+  .fade-enter-active {
+    transition: opacity 0.8s;
+  }
+  .fade-enter {
+    opacity: 0;
   }
 }
 </style>

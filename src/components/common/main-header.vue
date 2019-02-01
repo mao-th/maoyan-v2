@@ -27,6 +27,8 @@ export default {
   background-color: #e54847;
   color: #fff;
   text-align: center;
+  z-index: 1;
+  border-bottom: px2rem(1) solid #e54847;
   // 头部返回按钮样式
   .back {
     width: px2rem(45);
