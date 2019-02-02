@@ -8,7 +8,7 @@
         slot="left"
       ></router-link>
     </main-header>
-    <div class="shows-content" v-if="isShow">
+    <div class="shows-content" v-if="movies.length">
       <!-- 地址 -->
       <shows-address
         class="shows-address"
@@ -16,6 +16,7 @@
       ></shows-address>
       <!-- 滑动影片区域 + 电影信息 -->
       <shows-movie-list
+        class="shows-movie-list"
         :movies="movies"
         :movieIndex="movieIndex"
         @changeMovieIndex="handleChangeMovieIndex"
@@ -61,8 +62,7 @@ export default {
       movieIndex: 0, // 当前选取的影片索引
       showsIndex: 0, // showTimeList的索引
       stone: {}, // 字体路径
-      dealList: {}, // 影院套餐
-      isShow: false
+      dealList: {} // 影院套餐
     };
   },
   computed: {
@@ -126,7 +126,7 @@ export default {
       });
     },
     _getCinemaDetail() {
-      this.isShow = false;
+      this.$loading.show();
       const p = {
         cinemaId: this.cinemaId,
         movieId: this.movieId
@@ -141,7 +141,9 @@ export default {
           this.stone = res.stone;
           this.dealList = res.dealList;
           this.$nextTick(() => {
-            this.isShow = true;
+            setTimeout(() => {
+              this.$loading.remove();
+            }, 500);
           });
         })
         .catch(err => console.log(err));

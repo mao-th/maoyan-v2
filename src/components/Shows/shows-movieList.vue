@@ -6,7 +6,7 @@
       class="movie-list"
       :options="swiperOption"
       ref="mySwiper"
-      @slideChange="handleSlideChange"
+      @slideChangeTransitionStart="handleSlideChange"
     >
       <swiper-slide
         class="movie-item"
@@ -33,14 +33,18 @@ export default {
     return {
       slideIndex: 0,
       swiperOption: {
-        initialSlide: 0, // 设定初始化时slide的索引
         centeredSlides: true, // 设定为true时，active slide会居中，而不是默认状态下的居左。
         slidesPerView: "auto", // 设置slider容器能够同时显示的slides数量(carousel模式)。
         direction: "horizontal", // Slides的滑动方向，可设置水平(horizontal)或垂直(vertical)。
         spaceBetween: 30, // 在slide之间设置距离（单位px）。
-        slideToClickedSlide: true // 设置为true则点击slide会过渡到这个slide。
-      },
-      imgUrl: "" // 背景图片地址
+        slideToClickedSlide: true, // 设置为true则点击slide会过渡到这个slide。
+        speed: 250, // 切换速度，即slider自动滑动开始到结束的时间（单位ms），也是触摸滑动时释放至贴合的时间。
+        autoHeight: true, // 自动高度。设置为true时，wrapper和container会随着当前slide的高度而发生变化。
+        passiveListeners: false,
+        observer: true,
+        observeParents: true
+      }
+      // imgUrl: "" // 背景图片地址
     };
   },
   computed: {
@@ -54,6 +58,17 @@ export default {
     },
     filterUrl() {
       return this.imgUrl.replace("/w.h", "/148.208");
+    },
+    movieByIndex() {
+      return this.movies[this.movieIndex] || {};
+    },
+    imgUrl: {
+      get() {
+        return this.movieByIndex.img || "";
+      },
+      set(newValue) {
+        return newValue;
+      }
     }
   },
   filters: {
@@ -73,13 +88,10 @@ export default {
       this.$emit("changeMovieIndex", index, this.movies[index].id);
     }
   },
-  created() {
-    this.imgUrl = this.movies[this.movieIndex].img;
-  },
   mounted() {
     this.slideIndex = this.movieIndex;
     // 滚动到当前movieIndex索引指向的影片海报上
-    this.swiper.slideTo(this.movieIndex, 1000, false);
+    this.swiper.slideTo(this.slideIndex, 1000, false);
   }
 };
 </script>
@@ -113,12 +125,14 @@ export default {
     .movie-item {
       width: px2rem(130);
       height: px2rem(190);
+      transform: scale(1);
+      transition: transform 300ms;
       &:first-child {
         margin-left: px2rem(20);
       }
       &.active {
         transform: scale(1.15);
-        transition: transform 300ms ease;
+        transition: transform 300ms;
         border: px2rem(4) solid #fff;
         &::after {
           content: "";

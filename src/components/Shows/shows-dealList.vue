@@ -1,5 +1,5 @@
 <template>
-  <div id="deal-list-wrap">
+  <div id="deal-list-wrap" v-show="dealsList.length">
     <div class="deal-title">影院超值套餐</div>
     <div class="deal-list">
       <div class="deal-item" v-for="(item, index) in dealsList" :key="index">
