@@ -23,7 +23,7 @@
       <div class="info-src" v-text="src + '/' + dur + '分钟'"></div>
       <div class="info-pubDesc" v-text="pubDesc"></div>
     </div>
-    <i class="arrow"></i>
+    <i class="arrow" v-if="!show"></i>
   </div>
 </template>
 
@@ -31,7 +31,8 @@
 export default {
   name: "movieDetail",
   props: {
-    detailMovie: Object
+    detailMovie: Object,
+    show: Boolean
   },
   computed: {
     bgImgObj() {

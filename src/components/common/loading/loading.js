@@ -5,17 +5,19 @@ import Vue from "vue";
 let instance;
 
 const LoadingConstructor = Vue.extend(loadingComponent1);
-instance = new LoadingConstructor({
-  el: document.createElement("div")
-});
+
 const loading = {
   show: () => {
+    instance = new LoadingConstructor({
+      el: document.createElement("div")
+    });
     // 创建实例并进行挂载
     document.body.appendChild(instance.$el);
   },
   remove: () => {
     if (instance) {
       document.body.removeChild(instance.$el);
+      instance = null;
     }
   }
 };

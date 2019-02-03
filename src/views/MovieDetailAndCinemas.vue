@@ -9,8 +9,8 @@
     <transition name="fade">
       <div v-show="cinemas.length">
         <!-- MovieDetail 部分 -->
-        <div ref="detailMovie">
-          <movie-detail :detailMovie="detailMovie"></movie-detail>
+        <div ref="detailMovie" @click="handleToMovieDetail">
+          <detail-movie :detailMovie="detailMovie"></detail-movie>
         </div>
         <div :class="{ active: isFixed, active1: isFixed1, active2: isFixed2 }">
           <!-- 日期选择器 -->
@@ -41,15 +41,17 @@
         ></cinemas-list>
       </div>
     </transition>
+    <movie-detail :detailMovie="detailMovie" ref="movieDetail"></movie-detail>
   </div>
 </template>
 
 <script>
 import mainHeader from "@/components/common/main-header";
-import movieDetail from "@/components/MovieDetailAndCinemas/movieDetail";
+import detailMovie from "@/components/MovieDetailAndCinemas/movieDetail";
 import dateSelector from "@/components/MovieDetailAndCinemas/dateSelector";
 import cinemasFilter from "@/components/MovieDetailAndCinemas/filter";
 import cinemasList from "@/components/MovieDetailAndCinemas/cinemasList";
+import movieDetail from "@/views/MovieDetail.vue";
 import { mapGetters } from "vuex";
 import { getmovieDetail, getMoiveCinemas, getFilterCinemas } from "@/apis/api";
 import moment from "moment";
@@ -99,10 +101,11 @@ export default {
   },
   components: {
     mainHeader,
-    movieDetail,
+    detailMovie,
     dateSelector,
     cinemasFilter,
-    cinemasList
+    cinemasList,
+    movieDetail
   },
   methods: {
     /**
@@ -201,6 +204,12 @@ export default {
     handleFeatureCommit() {
       this._getMoiveCinemas();
       this.handleClose();
+    },
+    /**
+     *  用于控制MovieDetaile页的滑动出场
+     */
+    handleToMovieDetail() {
+      this.$refs.movieDetail.handleShow();
     },
     /**
      *  获取电影院列表数据相关
