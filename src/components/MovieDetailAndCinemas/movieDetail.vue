@@ -9,6 +9,7 @@
       <div class="info-enm" v-text="enm"></div>
       <!-- 多状态部分 start -->
       <div class="info-score" v-if="sc">
+        <star v-if="show" :sc="sc" />
         <span class="sc" v-text="sc"></span>
         <span class="person">&nbsp;&nbsp;({{ filterSnum }}万人评)</span>
       </div>
@@ -28,6 +29,7 @@
 </template>
 
 <script>
+import star from "@/components/MovieDetail/star";
 export default {
   name: "movieDetail",
   props: {
@@ -83,6 +85,9 @@ export default {
     pubDesc() {
       return this.detailMovie.pubDesc || "";
     }
+  },
+  components: {
+    star
   }
 };
 </script>

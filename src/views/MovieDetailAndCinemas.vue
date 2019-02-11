@@ -7,7 +7,7 @@
       <router-link to="/movie" class="back" slot="left"></router-link>
     </main-header>
     <transition name="fade">
-      <div v-show="cinemas.length">
+      <div v-show="random">
         <!-- MovieDetail 部分 -->
         <div ref="detailMovie" @click="handleToMovieDetail">
           <detail-movie :detailMovie="detailMovie"></detail-movie>
@@ -77,7 +77,8 @@ export default {
       hallType: -1,
       brandId: -1,
       serviceId: -1,
-      stationId: -1
+      stationId: -1,
+      random: 0 // 用于控制页面的展示与否
     };
   },
   computed: {
@@ -239,6 +240,7 @@ export default {
         this.showDays = res.showDays;
         this.cinemas = res.cinemas;
         this.pading = res.pading;
+        this.random = res.random;
         this.$nextTick(() => {
           setTimeout(() => {
             this.$loading.remove();
