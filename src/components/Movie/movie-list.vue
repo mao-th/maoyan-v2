@@ -18,8 +18,8 @@
         <div class="movie-info-wrap">
           <div class="movie-info">
             <div class="title">
-              <span class="movie-name" v-text="item.nm"></span>
-              <i :class="'version ' + item.version"></i>
+              <div class="movie-name" v-text="item.nm"></div>
+              <i v-if="item.version" :class="'version ' + item.version"></i>
               <i v-if="item.preShow" class="pre-show"></i>
             </div>
             <!-- 优化分数为0的展示 -->
@@ -166,13 +166,16 @@ export default {
         align-items: center;
         min-width: 0; // 为了让省略号生效
         .movie-info {
-          min-width: 0; // 为了让省略号生效
           margin-right: px2rem(10);
+          @include ellipsis();
           .title {
+            display: flex;
+            align-items: center;
             margin-bottom: px2rem(16);
             line-height: px2rem(48);
             max-height: px2rem(48);
             .movie-name {
+              display: inline-block;
               color: $text-title;
               font-size: px2rem(34);
               font-weight: 700;

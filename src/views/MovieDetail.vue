@@ -53,6 +53,23 @@
           </div>
         </div>
       </div>
+      <!-- 短评 -->
+      <comment />
+      <!-- 尾部 -->
+      <div class="end-button">
+        下载毛毛电影, 查看更多电影信息
+      </div>
+      <div class="movieinfo-footer">
+        <div class="phone">
+          <span>© 毛毛电影 客服电话: </span>
+          <span>1010-1111</span>
+        </div>
+        <p>
+          <span>京ICP备11111111号-1</span>
+          <span>京公网安备11111111111111号</span>
+        </p>
+        <p class="company">肇庆毛毛文化传媒有限公司</p>
+      </div>
     </div>
   </transition>
 </template>
@@ -60,6 +77,7 @@
 <script>
 import mainHeader from "@/components/common/main-header";
 import movieDetail from "@/components/MovieDetailAndCinemas/movieDetail";
+import comment from "@/components/MovieDetail/comment";
 export default {
   name: "MovieDetail",
   props: {
@@ -104,7 +122,8 @@ export default {
   },
   components: {
     movieDetail,
-    mainHeader
+    mainHeader,
+    comment
   },
   methods: {
     handleShow() {
@@ -224,6 +243,7 @@ export default {
   .media {
     width: 100%;
     background-color: #fff;
+    margin-bottom: px2rem(20);
     .title {
       padding: px2rem(20) px2rem(30);
       font-size: px2rem(30);
@@ -317,6 +337,34 @@ export default {
           margin-right: px2rem(30);
         }
       }
+    }
+  }
+  .end-button {
+    font-size: px2rem(32);
+    line-height: 1;
+    padding: px2rem(20);
+    margin: px2rem(20);
+    background-color: #e54847;
+    color: #fff;
+    text-align: center;
+    border-radius: px2rem(8);
+  }
+  .movieinfo-footer {
+    text-align: center;
+    .phone {
+      font-size: px2rem(28);
+      & > span:nth-child(2) {
+        color: #df3434;
+        text-decoration: underline;
+      }
+    }
+    & > p {
+      font-size: px2rem(20);
+      margin: px2rem(28) 0;
+      color: #9e9e9e;
+    }
+    .company {
+      font-size: px2rem(25);
     }
   }
 }

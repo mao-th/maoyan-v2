@@ -3,7 +3,12 @@ module.exports = {
   devServer: {
     proxy: {
       "/ajax": {
-        target: "http://m.maoyan.com"
+        target: "http://m.maoyan.com",
+        changeOrigin: true
+      },
+      "/mmdb": {
+        target: "http://m.maoyan.com",
+        changeOrigin: true
       },
       "/api": {
         target: "http://localhost:8080",

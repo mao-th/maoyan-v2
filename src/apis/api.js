@@ -55,3 +55,9 @@ export const getFilterCinemas = params => get("/ajax/filterCinemas", params);
  * @param {any} params
  */
 export const getCinemaDetail = params => get("/ajax/cinemaDetail", params);
+/**
+ *  根据电影id获取电影短评数据
+ * @param {any} params
+ */
+export const getMovieComments = params =>
+  get("/mmdb/comments/movie/" + params.movieId + ".json", params);
