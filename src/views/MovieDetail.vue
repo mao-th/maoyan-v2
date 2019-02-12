@@ -36,7 +36,7 @@
               <i class="play"></i>
             </li>
             <li class="photo-item" v-for="(item, index) in photos" :key="index">
-              <img :src="item | filterImg" alt="" />
+              <img :src="item | imgFilter('/180.140')" alt="" />
             </li>
           </ul>
         </div>
@@ -113,11 +113,6 @@ export default {
     },
     pn() {
       return this.detailMovie.pn || 0;
-    }
-  },
-  filters: {
-    filterImg(imgUrl) {
-      return imgUrl.replace("/w.h", "/180.140");
     }
   },
   components: {

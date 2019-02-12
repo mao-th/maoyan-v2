@@ -3,7 +3,7 @@
     <div class="background image" :style="bgImgObj"></div>
     <!-- 添加过滤层 -->
     <div class="background filter"></div>
-    <img class="img" :src="filterImgUrl" alt="影片海报" />
+    <img class="img" :src="imgUrl | imgFilter('/148.208')" alt="影片海报" />
     <div class="movie-info">
       <h3 class="info-nm" v-text="nm"></h3>
       <div class="info-enm" v-text="enm"></div>
@@ -39,14 +39,12 @@ export default {
   computed: {
     bgImgObj() {
       return {
-        "background-image": "url(" + this.filterImgUrl + ")"
+        "background-image":
+          "url(" + this.imgUrl.replace("/w.h", "/148.208") + ")"
       };
     },
     imgUrl() {
       return this.detailMovie.img || "";
-    },
-    filterImgUrl() {
-      return this.imgUrl.replace("/w.h", "/148.208");
     },
     nm() {
       return this.detailMovie.nm || "";

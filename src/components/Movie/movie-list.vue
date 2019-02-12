@@ -11,7 +11,11 @@
       >
         <!-- movie-image -->
         <div class="movie-item-left">
-          <img class="image" :src="item.img | imgFilter" alt="影片海报" />
+          <img
+            class="image"
+            :src="item.img | imgFilter('/128.180')"
+            alt="影片海报"
+          />
           <span class="promotion" v-if="item.haspromotionTag">特惠</span>
         </div>
         <!-- movie-info -->
@@ -60,16 +64,6 @@ export default {
       movieIds: [], // 该列表保存了目前正在热映电影的所有电影id信息，在加载更多的时候需要到
       oldCityId: 0
     };
-  },
-  computed: {
-    // cityId() {
-    //   return this.city.id;
-    // }
-  },
-  filters: {
-    imgFilter(imgUrL) {
-      return imgUrL.replace("/w.h", "/128.180");
-    }
   },
   components: {
     maoButton

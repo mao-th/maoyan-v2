@@ -10,7 +10,11 @@
         <div class="list-item" v-for="item in mostList" :key="item.id">
           <div class="movie-img">
             <!--  图片的展示在PC端观察会出现模糊的情况，但是在手机端观察正常（可能是hotcss中的东西导致） -->
-            <img class="image" :src="item.img | imgFilter1" alt="影片海报" />
+            <img
+              class="image"
+              :src="item.img | imgFilter('/170.230')"
+              alt="影片海报"
+            />
             <div class="bottom-wrap"></div>
             <div class="person-wish" v-text="item.wish + '人想看'"></div>
             <div class="collection">
@@ -29,7 +33,11 @@
         <div class="movie-list">
           <div class="list-item" v-for="item in list" :key="item.id">
             <div class="movie-img">
-              <img class="image" :src="item.img | imgFilter2" alt="影片海报" />
+              <img
+                class="image"
+                :src="item.img | imgFilter('/128.180')"
+                alt="影片海报"
+              />
               <span class="promotion" v-if="item.haspromotionTag">特惠</span>
             </div>
             <div class="movie-info">
@@ -99,12 +107,6 @@ export default {
     maoButton
   },
   filters: {
-    imgFilter1(imgUrl) {
-      return imgUrl.replace("/w.h", "/170.230");
-    },
-    imgFilter2(imgUrl) {
-      return imgUrl.replace("/w.h", "/128.180");
-    },
     textFilter(showInfo) {
       // 尝试运用下展开运算符
       return showInfo.split(" ")[0];

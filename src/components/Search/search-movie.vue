@@ -3,7 +3,11 @@
     <div class="movie-title">电影/电视剧/综艺</div>
     <div class="movie-list">
       <div class="movie-item" v-for="item in filterList" :key="item.id">
-        <img class="image" :src="item.img | imgFilter" alt="影片海报" />
+        <img
+          class="image"
+          :src="item.img | imgFilter('/128.180')"
+          alt="影片海报"
+        />
         <div class="movie-info">
           <div class="info-title">
             <div class="info-title-left">
@@ -55,11 +59,6 @@ export default {
     },
     filterList() {
       return this.list.slice(0, 3);
-    }
-  },
-  filters: {
-    imgFilter(imgUrl) {
-      return imgUrl.replace("/w.h", "/128.180");
     }
   },
   components: {

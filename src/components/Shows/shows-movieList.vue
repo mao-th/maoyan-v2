@@ -14,7 +14,7 @@
         :key="index"
         :class="{ active: slideIndex === index }"
       >
-        <img :src="item.img | imgFilter" alt="影片海报" />
+        <img :src="item.img | imgFilter('/148.208')" alt="影片海报" />
       </swiper-slide>
     </swiper>
   </div>
@@ -53,11 +53,9 @@ export default {
     },
     bgImgUrl() {
       return {
-        "background-image": "url(" + this.filterUrl + ")"
+        "background-image":
+          "url(" + this.imgUrl.replace("/w.h", "/148.208") + ")"
       };
-    },
-    filterUrl() {
-      return this.imgUrl.replace("/w.h", "/148.208");
     },
     movieByIndex() {
       return this.movies[this.movieIndex] || {};

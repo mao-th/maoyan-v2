@@ -5,6 +5,7 @@ import store from "./store";
 import "./assets/css/reset.css";
 import "./assets/lib/hotcss/hotcss";
 import loading from "./components/common/loading/loading";
+import "./filter"; // 引入全局过滤器
 
 Vue.use(loading);
 Vue.config.productionTip = false;
