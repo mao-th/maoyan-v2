@@ -20,7 +20,7 @@
         即将上映
       </div>
     </div>
-    <router-link class="search" to="/search">
+    <router-link class="search" to="/search?searchType=movie">
       <i class="iconfont icon-sousuo"></i>
     </router-link>
   </div>
@@ -59,6 +59,7 @@ export default {
   font-size: $font-normal;
   height: px2rem(88);
   line-height: px2rem(88);
+  background-color: #fff;
   border-bottom: 1px solid rgb(219, 214, 214);
   color: $text-normal;
   .city {

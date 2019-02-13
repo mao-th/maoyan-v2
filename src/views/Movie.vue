@@ -7,15 +7,12 @@
     <keep-alive>
       <component :is="componentName" :city="city"></component>
     </keep-alive>
-    <!-- <movie-list :movieList="movieList"></movie-list> -->
-    <main-nav></main-nav>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import mainHeader from "@/components/common/main-header";
-import mainNav from "@/components/common/main-nav";
 import movieNav from "@/components/Movie/movie-nav";
 import movieList from "@/components/Movie/movie-list";
 import movieList2 from "@/components/Movie/movie-list2";
@@ -35,7 +32,6 @@ export default {
     mainHeader,
     movieNav,
     movieList,
-    mainNav,
     movieList2
   },
   methods: {

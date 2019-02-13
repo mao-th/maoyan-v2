@@ -2,11 +2,12 @@
   <div id="shows-wrap">
     <!-- 头部 -->
     <main-header :title="nm">
-      <router-link
+      <div
         :to="'/movieDetailAndCinemas/' + movieId"
         class="back"
         slot="left"
-      ></router-link>
+        @click="$router.back()"
+      ></div>
     </main-header>
     <div class="shows-content" v-if="movies.length">
       <!-- 地址 -->

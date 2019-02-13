@@ -47,20 +47,25 @@ export default {
   padding: px2rem(30) 0 px2rem(30) px2rem(30);
   background-color: #fff;
   .address {
+    min-width: 0;
+    padding-right: px2rem(80);
     .cinema-name {
       font-size: px2rem(34);
       font-weight: 700;
       color: #333;
+      @include ellipsis();
     }
     .address-name {
       margin-top: px2rem(6);
+      @include ellipsis();
     }
   }
   .icon-addr {
+    flex-shrink: 0;
     width: px2rem(142);
     height: px2rem(62);
     text-align: center;
-    border-left: px2rem(2) solid #d8d8d8;
+    border-left: px2rem(1) solid #d8d8d8;
     img {
       margin-top: px2rem(10);
       width: px2rem(38);

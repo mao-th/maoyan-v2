@@ -2,7 +2,7 @@
   <div id="search-wrap">
     <!-- 头部优化 - 应用上插槽 -->
     <main-header title="毛毛电影v2">
-      <router-link to="/movie" slot="left" tag="div" class="back"></router-link>
+      <div @click="$router.back()" slot="left" class="back"></div>
     </main-header>
     <!-- 搜索框 -->
     <div class="search-hearder">
@@ -12,7 +12,9 @@
           v-model="keyWord"
           @input="handleInput"
           type="text"
-          placeholder="搜电影、搜影院"
+          :placeholder="
+            $route.query.searchType === 'cinema' ? '搜影院' : '搜电影、搜影院'
+          "
           ref="input"
         />
         <i
@@ -21,7 +23,7 @@
           @click="handleClear"
         ></i>
       </div>
-      <router-link to="/movie" tag="div" class="cancel">取消</router-link>
+      <div @click="$router.back()" class="cancel">取消</div>
     </div>
     <!-- 热门搜索 -->
     <div class="hot-search" v-show="isShow">
@@ -71,14 +73,16 @@ export default {
       movies: {}, // 根据关键字查询到的movies对象
       cinemas: {}, // 根据关键字查询到的cinemas对象
       timer: null, // 定义计时器
-      isShow: true // 控制关键字列表是否展示
+      isShow: true // 控制关键字列表是否展示,
     };
   },
   computed: {
-    ...mapGetters({
-      keyWordList: "searchMovieAndCinema",
-      city: "city"
-    }),
+    ...mapGetters(["searchMovieAndCinema", "searchCinema", "city"]),
+    keyWordList() {
+      return this.$route.query.searchType !== "cinema"
+        ? this.searchMovieAndCinema
+        : this.searchCinema;
+    },
     cityId() {
       return this.city.id;
     },
@@ -88,6 +92,9 @@ export default {
     },
     isEmptyCinemas() {
       return Object.keys(this.cinemas).length;
+    },
+    stype() {
+      return this.$route.query.searchType !== "cinema" ? -1 : 2; // -1 表示搜索电影和电影院 / 2表示搜索电影院
     }
   },
   components: {
@@ -103,21 +110,13 @@ export default {
       const p = {
         cityId: this.cityId,
         kw: this.keyWord,
-        stype: -1
+        stype: this.stype
       };
       searchKeyWord(p).then(res => {
         this.isShow = false; // 隐藏热门搜索
         res = res.data;
-        if (res.movies) {
-          this.movies = res.movies;
-        } else {
-          this.movies = {};
-        }
-        if (res.cinemas) {
-          this.cinemas = res.cinemas;
-        } else {
-          this.cinemas = {};
-        }
+        this.movies = res.movies ? res.movies : {};
+        this.cinemas = res.cinemas ? res.cinemas : {};
 
         this.$nextTick(() => {
           // 2019-01-25 优化退格到最后时出现的请求延迟现象。
@@ -129,7 +128,9 @@ export default {
           // 2.添加在关键字列表中
           _queueSort(this.keyWordList, this.keyWord);
           // 保存到当前vuex中
-          this.$store.commit("SET_SEARCH_MOVIE", this.keyWordList);
+          this.$route.query.searchType !== "cinema"
+            ? this.$store.commit("SET_SEARCH_MOVIE", this.keyWordList)
+            : this.$store.commit("SET_SEARCH_CINEMA", this.keyWordList);
         });
       });
     },
@@ -190,7 +191,6 @@ export default {
 
 <style lang="scss" scoped>
 #search-wrap {
-  width: 100%;
   height: 100%;
   background-color: #f5f5f5;
   overflow-y: scroll;

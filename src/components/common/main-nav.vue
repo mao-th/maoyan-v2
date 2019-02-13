@@ -1,17 +1,17 @@
 <template>
   <div id="main-nav">
-    <div class="nav-item active">
+    <router-link to="/movie" tag="div" class="nav-item">
       <i class="iconfont icon-dianying"></i>
       <div class="nav-name">电影</div>
-    </div>
-    <div class="nav-item">
+    </router-link>
+    <router-link to="/cinema" tag="div" class="nav-item">
       <i class="iconfont icon-yingyuana"></i>
       <div class="nav-name">影院</div>
-    </div>
-    <div class="nav-item">
+    </router-link>
+    <router-link to="/mine" tag="div" class="nav-item">
       <i class="iconfont icon-tubiaolunkuo-"></i>
       <div class="nav-name">我的</div>
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -36,7 +36,7 @@ export default {
     height: px2rem(98);
     flex: 1;
     text-align: center;
-    &.active {
+    &.router-link-active {
       color: $btnColor;
     }
     .iconfont {

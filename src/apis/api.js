@@ -61,3 +61,8 @@ export const getCinemaDetail = params => get("/ajax/cinemaDetail", params);
  */
 export const getMovieComments = params =>
   get("/mmdb/comments/movie/" + params.movieId + ".json", params);
+/**
+ *  获取电影院列表
+ * @param {any} params
+ */
+export const getCinemaList = params => get("/ajax/cinemaList", params);

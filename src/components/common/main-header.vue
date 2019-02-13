@@ -29,6 +29,8 @@ export default {
   text-align: center;
   z-index: 1;
   border-bottom: px2rem(1) solid #e54847;
+  padding: 0 px2rem(100);
+  @include ellipsis();
   // 头部返回按钮样式
   .back {
     width: px2rem(45);
