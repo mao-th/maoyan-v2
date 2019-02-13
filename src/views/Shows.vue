@@ -31,13 +31,16 @@
       <date-selector
         :shows="shows"
         @changeDateIndex="handleChangeDateIndex"
+        ref="dateSelector"
       ></date-selector>
       <!-- 影片当日播放时间信息 -->
       <show-time-list
-        :plist="plist"
+        :shows="shows"
         :vipInfo="vipInfo"
         :stone="stone"
         :dur="dur"
+        :showsIndex="showsIndex"
+        @changeDateIndex="handleChangeDateIndex"
       ></show-time-list>
       <!-- 影院套餐 -->
       <shows-deal-list :dealList="dealList"></shows-deal-list>
@@ -91,12 +94,6 @@ export default {
     shows() {
       return this.movieInfo.shows || [];
     },
-    showsByIndex() {
-      return this.shows[this.showsIndex] || {};
-    },
-    plist() {
-      return this.showsByIndex.plist || [];
-    },
     vipInfo() {
       return this.showData.vipInfo || [];
     }
@@ -113,6 +110,8 @@ export default {
   methods: {
     handleChangeDateIndex(index) {
       this.showsIndex = index;
+      // 这句代码的作用是 当用户是从 点击查看明天场次的按钮 触发时，需要通知修改组件date-selector中的状态
+      this.$refs.dateSelector.selectIndex = index;
     },
     handleChangeMovieIndex(index, movieId) {
       this.movieIndex = index;
@@ -161,7 +160,7 @@ export default {
   height: 100%;
   font-size: px2rem(26);
   color: #999;
-  background-color: #f5f5f5;
+  background-color: #f0f0f0;
   overflow-x: hidden;
   overflow-y: scroll;
   &::-webkit-scrollbar {

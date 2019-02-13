@@ -24,9 +24,7 @@ export default {
       // 全填充的星星数
       let full_num = parseInt(this.sc / 2);
       let half_num = 0;
-      if (this.sc % 2 >= 1.5) {
-        full_num++;
-      } else if (this.sc % 2 != 0) {
+      if (this.sc % 2 != 0 && this.sc % 2 >= 1.0) {
         half_num++;
       }
       let empty_num = 5 - full_num - half_num;

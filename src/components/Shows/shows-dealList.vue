@@ -52,6 +52,7 @@ export default {
 #deal-list-wrap {
   font-size: px2rem(28);
   background-color: #fff;
+  margin-bottom: px2rem(50);
   .deal-title {
     font-size: px2rem(30);
     color: #666;

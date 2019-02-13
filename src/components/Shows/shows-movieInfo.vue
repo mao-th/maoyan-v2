@@ -46,6 +46,7 @@ export default {
   .movie-title {
     font-weight: 700;
     color: #ffb400;
+    @include ellipsis();
     .movie-name {
       font-size: px2rem(34);
       color: #333;
@@ -59,6 +60,7 @@ export default {
   }
   .movie-desc {
     margin-top: px2rem(4);
+    @include ellipsis();
   }
 }
 </style>
