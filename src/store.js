@@ -21,7 +21,8 @@ export default new Vuex.Store({
   state: {
     accessCityList: accessCityList || [], // 最近访问的城市列表
     search: search || { movie: [], cinema: [] }, // 搜索的关键字列表
-    RT: "" // 电影上映时间（用于movie页和movieDetailAndCinemas页进行通信
+    RT: "", // 电影上映时间（用于movie页和movieDetailAndCinemas页进行通信
+    username: "" // 用户名
   },
   mutations: {
     SET_CITY(state, payload) {
@@ -50,6 +51,9 @@ export default new Vuex.Store({
       } catch (err) {
         console.log(err);
       }
+    },
+    SET_USERNAME(state, payload) {
+      state.username = payload;
     }
   },
   getters: {

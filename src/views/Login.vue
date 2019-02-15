@@ -121,7 +121,7 @@ export default {
      *  简单模拟账号密码登录
      */
     handleSubmit() {
-      const { username, password, $router } = this;
+      const { username, password, $router, $store } = this;
       if (!username || !password) {
         alert("用户名或密码不能为空!");
         return;
@@ -130,6 +130,7 @@ export default {
       if (username === "admin") {
         if (password === "admin") {
           // 模拟登录成功的情况
+          $store.commit("SET_USERNAME", "admin");
           $router.replace("/mine");
         } else {
           // 密码错误
