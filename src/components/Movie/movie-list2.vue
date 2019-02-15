@@ -43,7 +43,7 @@
             <div class="movie-info">
               <div class="info-title">
                 <span class="movie-name" v-text="item.nm"></span>
-                <i :class="'version ' + item.version"></i>
+                <i :class="'version ' + item.version" v-if="item.version"></i>
                 <i v-if="item.preShow" class="pre-show"></i>
               </div>
               <div class="wantsee">
@@ -339,12 +339,16 @@ export default {
           padding-right: px2rem(10);
           padding-left: px2rem(20);
           .info-title {
+            display: flex;
             font-size: px2rem(34);
+            align-items: center;
             font-weight: 700;
             color: #333;
             margin-bottom: px2rem(14);
+            min-width: 0;
             .movie-name {
               padding-right: px2rem(10);
+              @include ellipsis();
             }
           }
           .wantsee {

@@ -4,6 +4,7 @@ import Movie from "./views/Movie.vue";
 import City from "./views/City.vue";
 import Search from "./views/Search.vue";
 import MovieDetailAndCinemas from "./views/MovieDetailAndCinemas";
+import Login from "./views/Login";
 import Shows from "./views/Shows";
 
 Vue.use(Router);
@@ -53,6 +54,11 @@ export default new Router({
       meta: {
         showMainNav: true
       }
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: Login
     }
   ]
 });

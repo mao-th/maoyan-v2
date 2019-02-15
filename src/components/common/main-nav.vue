@@ -8,7 +8,7 @@
       <i class="iconfont icon-yingyuana"></i>
       <div class="nav-name">影院</div>
     </router-link>
-    <router-link to="/mine" tag="div" class="nav-item">
+    <router-link to="/login" tag="div" class="nav-item">
       <i class="iconfont icon-tubiaolunkuo-"></i>
       <div class="nav-name">我的</div>
     </router-link>
