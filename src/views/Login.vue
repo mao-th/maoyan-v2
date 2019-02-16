@@ -46,6 +46,7 @@
             key="phone"
             v-model="phone"
             @input="handleCheckPhone"
+            ref="Phone"
           />
           <button
             class="btn-weak"
@@ -53,7 +54,7 @@
             disabled="true"
             ref="VcodeBtn"
           >
-            获取验证码
+            {{ btn_msg }}
           </button>
         </div>
         <div class="input-item" v-show="loginType">
@@ -74,6 +75,7 @@
             placeholder="请输入短信验证码"
             key="vcode"
             disabled="disabled"
+            ref="Vcode"
             v-model="vcode"
           />
         </div>
@@ -83,6 +85,7 @@
           class="login-btn"
           @click="handleSubmit"
           :disabled="loginType ? false : true"
+          ref="LoginBtn"
         >
           登录
         </button>
@@ -110,7 +113,8 @@ export default {
       username: "", // 美团账号
       password: "", // 美团账号密码
       phone: "", // 手机号码
-      vcode: "" // 短信验证码
+      vcode: "", // 短信验证码
+      btn_msg: "获取验证码" // 验证码按钮提示信息
     };
   },
   components: {
@@ -149,16 +153,37 @@ export default {
       // 输入手机号码不合法
       if (!/^1[34578]\d{9}$/.test(phone)) {
         $refs.VcodeBtn.setAttribute("disabled", true);
+        this.btn_msg = "获取验证码";
         return;
       }
       // 合法的情况
       $refs.VcodeBtn.removeAttribute("disabled");
+      this.btn_msg = "发送验证码";
     },
     /**
-     *  获取验证码
+     *  2019-02-16获取验证码
      */
     handleGetVcode() {
-      alert("获取验证码");
+      // 1.发送ajax请求
+      // 2.根据响应的状态码判断响应结果
+      // 简单模拟 - 假设所有发送都是成功的
+      console.log("success");
+      this.$refs.Vcode.removeAttribute("disabled"); // 启用短信验证码输入框
+      this.$refs.LoginBtn.removeAttribute("disabled"); // 启用登录按钮
+      this.$refs.VcodeBtn.setAttribute("disabled", true); // 禁用按钮
+      this.$refs.Phone.setAttribute("disabled", true); // 进入手机号码输入框，防止用户再次退格输入，会存在bug
+      let time = 5;
+      // 3.启用定时器
+      this.interval = setInterval(() => {
+        this.btn_msg = time-- + "秒";
+        if (time < 0) {
+          this.btn_msg = "再次发送验证码";
+          this.$refs.VcodeBtn.removeAttribute("disabled"); // 计时结束后启用按钮
+          this.$refs.Phone.removeAttribute("disabled"); // 启用手机号码输入框
+          // 4.清除定时器
+          clearInterval(this.interval);
+        }
+      }, 1000);
     }
   }
 };
