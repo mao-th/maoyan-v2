@@ -62,7 +62,7 @@
 import mainHeader from "@/components/common/main-header";
 import searchMovie from "@/components/Search/search-movie";
 import searchCinema from "@/components/Search/search-cinema";
-import { _queueSort } from "@/common/common";
+import { _queueSort2 } from "@/common/common";
 import { mapGetters } from "vuex";
 import { searchKeyWord } from "@/apis/api";
 export default {
@@ -126,7 +126,7 @@ export default {
             this.isShow = true;
           }
           // 2.添加在关键字列表中
-          _queueSort(this.keyWordList, this.keyWord);
+          _queueSort2(this.keyWordList, this.keyWord);
           // 保存到当前vuex中
           this.$route.query.searchType !== "cinema"
             ? this.$store.commit("SET_SEARCH_MOVIE", this.keyWordList)

@@ -1,12 +1,12 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Movie from "./views/Movie.vue";
-import City from "./views/City.vue";
-import Search from "./views/Search.vue";
-import MovieDetailAndCinemas from "./views/MovieDetailAndCinemas";
-import Login from "./views/Login";
-import Mine from "./views/Mine";
-import Shows from "./views/Shows";
+import Movie from "@/views/Movie.vue";
+import City from "@/views/City.vue";
+import Search from "@/views/Search.vue";
+import MovieDetailAndCinemas from "@/views/MovieDetailAndCinemas";
+import Login from "@/views/Login";
+import Mine from "@/views/Mine";
+import Shows from "@/views/Shows";
 
 Vue.use(Router);
 
@@ -51,7 +51,7 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Cinema.vue"),
+        import(/* webpackChunkName: "about" */ "@/views/Cinema.vue"),
       meta: {
         showMainNav: true
       }

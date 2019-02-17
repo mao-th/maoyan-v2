@@ -338,7 +338,8 @@ export default {
         top: px2rem(15);
         right: 0;
         display: inline-block;
-        width: px2rem(1);
+        width: 0;
+        border-left: px2rem(1) solid #e5e5e5;
         height: px2rem(50);
         background-color: #e5e5e5;
       }
