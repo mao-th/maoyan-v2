@@ -39,7 +39,7 @@
             v-text="item"
             @click="handleSetKeyWord(item)"
           ></span>
-          <div class="delete-kw" @click="handleDeleteKeyWord(index)"></div>
+          <div class="delete-kw" @click.stop="handleDeleteKeyWord(index)"></div>
         </li>
       </ul>
       <div class="hot-title">热门搜索</div>
@@ -165,7 +165,11 @@ export default {
      *  删除关键字列表中的对应项
      */
     handleDeleteKeyWord(index) {
-      this.keyWordList.splice(index, 1);
+      // 2019-02-21优化
+      // this.keyWordList.splice(index, 1);
+      this.$route.query.searchType !== "cinema"
+        ? this.$store.commit("DELETE_SEARCH_MOVIE", index)
+        : this.$store.commit("DELETE_SEARCH_CINEMA", index);
     },
     /**
      *  根据在关键字列表的点击设置查询的关键字

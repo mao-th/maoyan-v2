@@ -9,14 +9,14 @@
       <div
         class="login-type"
         :class="{ loginActive: loginType }"
-        @click="loginType = true"
+        @click="handleChangeLoginType(true)"
       >
         美团账号登录
       </div>
       <div
         class="login-type"
         :class="{ loginActive: !loginType }"
-        @click="loginType = false"
+        @click="handleChangeLoginType(false)"
       >
         手机验证登录
       </div>
@@ -84,8 +84,8 @@
         <button
           class="login-btn"
           @click="handleSubmit"
-          :disabled="loginType ? false : true"
           ref="LoginBtn"
+          :disabled="loginType ? false : true"
         >
           登录
         </button>
@@ -110,8 +110,8 @@ export default {
   data() {
     return {
       loginType: true, // true代表(或滚动条滑动到)美团账号登录 / false代表(或滚动条滑动到)手机验证登录
-      username: "", // 美团账号
-      password: "", // 美团账号密码
+      username: "admin", // 美团账号
+      password: "admin", // 美团账号密码
       phone: "", // 手机号码
       vcode: "", // 短信验证码
       btn_msg: "获取验证码" // 验证码按钮提示信息
@@ -122,27 +122,53 @@ export default {
   },
   methods: {
     /**
+     *  登陆方式切换
+     */
+    handleChangeLoginType(type) {
+      this.loginType = type;
+
+      // 第一种实现
+      // if (!type) {
+      //   if (this.phone.length === 11) {
+      //     this.$refs.LoginBtn.removeAttribute("disabled"); // 启用登录按钮
+      //   } else {
+      //     this.$refs.LoginBtn.setAttribute("disabled", true);
+      //   }
+      // }
+
+      // 第二种实现
+      this.$nextTick(() => {
+        if (!type && this.phone.length === 11) {
+          this.$refs.LoginBtn.removeAttribute("disabled"); // 启用登录按钮
+        }
+      });
+    },
+    /**
      *  简单模拟账号密码登录
      */
     handleSubmit() {
       const { username, password, $router, $store } = this;
-      if (!username || !password) {
-        alert("用户名或密码不能为空!");
-        return;
-      }
+      if (this.loginType) {
+        if (!username || !password) {
+          alert("用户名或密码不能为空!");
+          return;
+        }
 
-      if (username === "admin") {
-        if (password === "admin") {
-          // 模拟登录成功的情况
-          $store.commit("SET_USERNAME", "admin");
-          $router.replace("/mine");
+        if (username === "admin") {
+          if (password === "admin") {
+            // 模拟登录成功的情况
+            $store.commit("SET_USERNAME", "admin");
+            $router.replace("/mine");
+          } else {
+            // 密码错误
+            alert("用户名密码错误!");
+          }
         } else {
-          // 密码错误
-          alert("用户名密码错误!");
+          // 用户名不存在
+          alert("用户名不存在!");
         }
       } else {
-        // 用户名不存在
-        alert("用户名不存在!");
+        // 手机号码登陆
       }
     },
     /**
@@ -153,11 +179,13 @@ export default {
       // 输入手机号码不合法
       if (!/^1[34578]\d{9}$/.test(phone)) {
         $refs.VcodeBtn.setAttribute("disabled", true);
+        $refs.LoginBtn.setAttribute("disabled", true);
         this.btn_msg = "获取验证码";
         return;
       }
       // 合法的情况
-      $refs.VcodeBtn.removeAttribute("disabled");
+      $refs.VcodeBtn.removeAttribute("disabled"); // 启用发送短信验证码按钮
+      $refs.LoginBtn.removeAttribute("disabled"); // 启用登录按钮
       this.btn_msg = "发送验证码";
     },
     /**
@@ -172,7 +200,7 @@ export default {
       this.$refs.LoginBtn.removeAttribute("disabled"); // 启用登录按钮
       this.$refs.VcodeBtn.setAttribute("disabled", true); // 禁用按钮
       this.$refs.Phone.setAttribute("disabled", true); // 进入手机号码输入框，防止用户再次退格输入，会存在bug
-      let time = 5;
+      let time = 60;
       // 3.启用定时器
       this.interval = setInterval(() => {
         this.btn_msg = time-- + "秒";
