@@ -75,7 +75,7 @@
 
 <script>
 import { getCityList, getLocationCity } from "@/apis/api";
-import { _queueSort2 } from "@/common/common";
+import { _queueSort3 } from "@/common/common";
 import { mapState } from "vuex";
 export default {
   name: "City",
@@ -171,7 +171,7 @@ export default {
      *  处理最近访问城市列表队列
      */
     _handleCityQueue(city) {
-      _queueSort2(this.accessCityList, city);
+      _queueSort3(this.accessCityList, city);
 
       this.$store.commit("SET_ACCESSCITYLIST", this.accessCityList); // 提交commit
 

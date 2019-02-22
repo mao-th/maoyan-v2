@@ -63,3 +63,22 @@ export function _queueSort2(list, compare) {
   }
   list.unshift(compare); // 添加到头部
 }
+
+/**
+ * 通过indexOf实现
+ * @param {Array} list
+ * @param {Object} compare
+ */
+export function _queueSort3(list, compare) {
+  if (!compare) return;
+  let sIndex = list.indexOf(compare);
+  if (sIndex !== -1) {
+    // 属于重复的点击
+    list.splice(sIndex, 1); // 删除掉
+  } else {
+    if (list.length >= 3) {
+      list.pop(); // 删除最后一个
+    }
+  }
+  list.unshift(compare); // 添加到头部
+}
